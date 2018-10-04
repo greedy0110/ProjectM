@@ -20,8 +20,9 @@ class LockScreenService : Service() {
     var mView: View? = null
     var mWindowManager: WindowManager? = null
 
-    override fun onBind(intent: Intent): IBinder {
+    override fun onBind(intent: Intent): IBinder? {
         TODO("Return the communication channel to the service.")
+        return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

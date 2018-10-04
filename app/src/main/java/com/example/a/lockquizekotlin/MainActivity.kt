@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.lock_screen.*
 
 class MainActivity : AppCompatActivity() {
     val TAG: String = "MainActivity"
@@ -19,40 +18,44 @@ class MainActivity : AppCompatActivity() {
 
         startServiceButton.setOnClickListener {
             Log.d(TAG, "start service button 눌렸다.")
-            startLockScreenService()
+            startUnlockCaptureService()
         }
 
         stopServiceButton.setOnClickListener {
             Log.d(TAG, "stop service button 눌렸다.")
-            val intent = Intent(applicationContext, LockScreenService::class.java)
-            applicationContext?.stopService(intent)
+            stopUnlockCaptureService()
         }
     }
 
-    private fun startLockScreenService() {
+    private fun startUnlockCaptureService() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (!Settings.canDrawOverlays(applicationContext)) {
                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
                 startActivityForResult(intent, 1234)
             } else {
-                startLockScreenServiceNoVersionCheck()
+                startUnlockCaptureServiceNoVersionCheck()
             }
         }
         else {
-            startLockScreenServiceNoVersionCheck()
+            startUnlockCaptureServiceNoVersionCheck()
         }
     }
 
-    private fun startLockScreenServiceNoVersionCheck(){
-        val intent = Intent(applicationContext, LockScreenService::class.java)
+    private fun startUnlockCaptureServiceNoVersionCheck(){
+        val intent = Intent(applicationContext, UnlockCaptureService::class.java)
         applicationContext?.startService(intent)
+    }
+
+    private fun stopUnlockCaptureService(){
+        val intent = Intent(applicationContext, UnlockCaptureService::class.java)
+        applicationContext?.stopService(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode) {
             1234 -> {
-                startLockScreenServiceNoVersionCheck()
+                startUnlockCaptureServiceNoVersionCheck()
             }
         }
     }
