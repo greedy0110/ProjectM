@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 
 class LockScreenService : Service() {
@@ -58,6 +59,12 @@ class LockScreenService : Service() {
             }
         }
 
+        val backgroundImage = mView?.findViewById(R.id.background) as ImageView?
+        backgroundImage?.let {
+            // 대체 왜인지는 모르겠으나 여기서 이미지 리소스를 지정해주어야한다.
+            backgroundImage.setImageResource(R.drawable.ic_launcher_background)
+        }
+
         selectDisplayQuestion()
 
         val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -71,7 +78,7 @@ class LockScreenService : Service() {
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or
                         WindowManager.LayoutParams.FLAG_FULLSCREEN or
                         WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-                PixelFormat.OPAQUE
+                PixelFormat.TRANSLUCENT
         )
 
         mWindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
