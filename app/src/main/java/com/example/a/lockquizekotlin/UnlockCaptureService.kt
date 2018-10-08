@@ -114,8 +114,8 @@ class UnlockCaptureService : Service() {
 
         val pendingIntent = PendingIntent.getActivity(applicationContext, requestID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        builder.setContentTitle("Title") // required
-                .setContentText("Content")  // required
+        builder.setContentTitle("LockQuize") // required
+                .setContentText("정답을 맞추지못하면 영원히 빠져나올수 없지롱")  // required
                 .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
                 .setAutoCancel(true) // 알림 터치시 반응 후 삭제
 
