@@ -4,4 +4,10 @@
     <string name="qtitle">소득세법</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
+    <string name="lock_slide_set">잠금 슬라이드 설정</string>
+    <string name="skin_setting">스킨 설정</string>
+    <string name="other">기타</string>
+    <string name="ox_quize">OX 퀴즈</string>
+    <string name="wrong_answer">오답 노트</string>
+    <string name="setting">설정</string>
 </resources>
