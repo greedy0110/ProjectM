@@ -11,6 +11,11 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
 
+        ox_quiz_button.setOnClickListener {
+            val oxQuiz = Intent(applicationContext, CategoryListActivity::class.java)
+            startActivity(oxQuiz)
+        }
+
         setting_button.setOnClickListener {
             val setting = Intent(applicationContext, SettingActivitiy::class.java)
             startActivity(setting)

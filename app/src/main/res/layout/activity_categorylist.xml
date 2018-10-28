@@ -29,6 +29,7 @@
         app:srcCompat="@drawable/lgmcs" />
 
     <LinearLayout
+        android:id="@+id/category_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -41,26 +42,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
-        <Button
-            android:id="@+id/ox_quiz_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/ox_quize" />
-
-        <Button
-            android:id="@+id/wrong_answer_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/wrong_answer" />
-
-        <Button
-            android:id="@+id/setting_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/setting" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import com.example.a.lockquizekotlin.DBContract.*
 
 class SplashActivity : AppCompatActivity() {
 
@@ -19,5 +20,6 @@ class SplashActivity : AppCompatActivity() {
             this@SplashActivity.finish()
 
         }, delayTime)
+        DbUtils.saveDbAssetToDevice(applicationContext, true) // 초기 DB 파일 다시 쓰기
     }
 }

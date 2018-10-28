@@ -14,6 +14,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.a.lockquizekotlin.DBContract.QuestionContract
 
 class LockScreenService : Service() {
     val TAG: String = "LockScreenService"
@@ -106,11 +107,11 @@ class LockScreenService : Service() {
         }
 
         // 데이터베이스 컬럼 중에서 알아낼 prjection을 정의한다.
-        val projection = arrayOf(BaseColumns._ID, QuestionContract.QuestionSchema.COLUMN_NAME_CATEGORY,
-                QuestionContract.QuestionSchema.COLUMN_NAME_QUESTION, QuestionContract.QuestionSchema.COLUMN_NAME_ANSWER)
+        val projection = arrayOf(BaseColumns._ID, QuestionContract.Schema.COLUMN_NAME_CATEGORY_ID,
+                QuestionContract.Schema.COLUMN_NAME_QUESTION, QuestionContract.Schema.COLUMN_NAME_ANSWER)
 
         val cursor = db?.query(
-                QuestionContract.QuestionSchema.TABLE_NAME,
+                QuestionContract.Schema.TABLE_NAME,
                 projection,
                 null,
                 null,
@@ -119,15 +120,15 @@ class LockScreenService : Service() {
                 null
         )
 
-        val items = mutableListOf<QuestionContract.QuestionEntry>()
+        val items = mutableListOf<QuestionContract.Entry>()
         cursor?.let {
             with(cursor) {
                 while (moveToNext()) {
                     val id = getLong(getColumnIndexOrThrow(BaseColumns._ID))
-                    val category = getString(getColumnIndexOrThrow(QuestionContract.QuestionSchema.COLUMN_NAME_CATEGORY))
-                    val question = getString(getColumnIndexOrThrow(QuestionContract.QuestionSchema.COLUMN_NAME_QUESTION))
-                    val answer = getString(getColumnIndexOrThrow(QuestionContract.QuestionSchema.COLUMN_NAME_ANSWER))
-                    val entry = QuestionContract.QuestionEntry(id, category, question, answer)
+                    val category = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_CATEGORY_ID))
+                    val question = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_QUESTION))
+                    val answer = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_ANSWER))
+                    val entry = QuestionContract.Entry(id, category, question, answer)
                     items.add(entry)
                 }
             }

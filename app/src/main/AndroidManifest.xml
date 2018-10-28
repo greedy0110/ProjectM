@@ -40,7 +40,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingActivitiy" />
-        <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".MenuActivity" />
+        <activity android:name=".CategoryListActivity"></activity>
     </application>
 
 </manifest>
