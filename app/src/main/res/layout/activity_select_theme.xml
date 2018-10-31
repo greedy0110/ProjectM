@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/activity_select_theme_layout"
+    android:background="@drawable/db_back"
+    tools:context=".SelectThemeActivity">
+
+    <Button
+        android:id="@+id/ast_star_button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/yellow_star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/theme_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="25dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ast_star_button">
+
+        <LinearLayout
+            android:id="@+id/black_theme_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="top|center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/dp_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/dp" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dp"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/db_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/db" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/db"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/dgr_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/dgr" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dgr"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/dg_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/dg" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dg"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/white_theme_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="top|center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/ly_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ly" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ly"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/lp_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/lp" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lp"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/lg_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/lg" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lg"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/ls_button"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/ls" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ls"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

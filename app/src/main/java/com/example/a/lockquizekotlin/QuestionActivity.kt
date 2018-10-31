@@ -1,6 +1,7 @@
 package com.example.a.lockquizekotlin
 
 import android.content.ContentValues
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,9 @@ import android.widget.Toast
 import com.example.a.lockquizekotlin.DBContract.CategoryContract
 import com.example.a.lockquizekotlin.DBContract.IncorrectContract
 import com.example.a.lockquizekotlin.DBContract.QuestionContract
+import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.Utils.LayoutUtils
+import com.example.a.lockquizekotlin.Utils.ResourceUtils
 import kotlinx.android.synthetic.main.activity_question.*
 import java.util.*
 
@@ -50,6 +54,11 @@ class QuestionActivity : AppCompatActivity() {
             }
             else setQuestionUIByIndex(0)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LayoutUtils.setTheme(applicationContext, activity_question_layout)
     }
 
     private fun setButtonEvents(){

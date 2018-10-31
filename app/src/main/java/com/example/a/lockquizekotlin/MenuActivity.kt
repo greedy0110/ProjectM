@@ -7,10 +7,15 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
+import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import com.example.a.lockquizekotlin.LockScreen.UnlockCaptureService
+import com.example.a.lockquizekotlin.Utils.LayoutUtils
+import com.example.a.lockquizekotlin.Utils.ResourceUtils
 import kotlinx.android.synthetic.main.activity_menu.*
 
 class MenuActivity : AppCompatActivity() {
+    val TAG = "MenuActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,12 @@ class MenuActivity : AppCompatActivity() {
 
         startUnlockCaptureService()
     }
+
+    override fun onStart() {
+        super.onStart()
+        LayoutUtils.setTheme(applicationContext, activity_menu_layout)
+    }
+
 
     private fun startUnlockCaptureService() {
         if (Build.VERSION.SDK_INT >= 23) {

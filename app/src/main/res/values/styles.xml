@@ -17,6 +17,7 @@
     </style>
 
 
+
     <!-- Custom font style 일괄적용 -->
     <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">@font/nanum_gothic_coding</item>

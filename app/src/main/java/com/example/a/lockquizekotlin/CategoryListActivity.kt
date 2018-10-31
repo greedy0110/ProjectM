@@ -2,18 +2,16 @@ package com.example.a.lockquizekotlin
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.BaseColumns
 import android.util.Log
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import com.example.a.lockquizekotlin.DBContract.CategoryContract
-import com.example.a.lockquizekotlin.DBContract.QuestionContract
+import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.Utils.LayoutUtils
+import com.example.a.lockquizekotlin.Utils.ResourceUtils
 import kotlinx.android.synthetic.main.activity_categorylist.*
-import kotlinx.android.synthetic.main.activity_categorylist.view.*
 
 class CategoryListActivity : AppCompatActivity() {
     private val TAG = "CategoryListActivity"
@@ -55,6 +53,11 @@ class CategoryListActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LayoutUtils.setTheme(applicationContext, activity_categorylist_layout)
     }
 
     private fun readAllCategoryTable(): MutableList<CategoryContract.Entry>{

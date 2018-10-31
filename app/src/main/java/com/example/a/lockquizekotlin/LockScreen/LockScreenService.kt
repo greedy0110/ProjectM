@@ -14,7 +14,12 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.a.lockquizekotlin.DBContract.QuestionContract
+import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import com.example.a.lockquizekotlin.R
+import com.example.a.lockquizekotlin.R.id.activity_select_theme_layout
+import com.example.a.lockquizekotlin.Utils.LayoutUtils
+import com.example.a.lockquizekotlin.Utils.ResourceUtils
+import kotlinx.android.synthetic.main.activity_select_theme.*
 import java.util.*
 
 class LockScreenService : Service() {
@@ -76,6 +81,8 @@ class LockScreenService : Service() {
 //            // 대체 왜인지는 모르겠으나 여기서 이미지 리소스를 지정해주어야한다.
 //            backgroundImage.setImageResource(R.drawable.ic_launcher_background)
 //        }
+        val layout = mView?.findViewById(R.id.lock_screen_layout) as View
+        LayoutUtils.setTheme(applicationContext, layout)
 
         selectDisplayQuestion()
 

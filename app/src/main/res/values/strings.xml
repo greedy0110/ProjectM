@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">너란 별</string>
-    <string name="qcontent">내국법인은 각 사업연도의 소득에 대한 법인세 산출세액에 해당 사업연도에 원천징수 된 세액을 합산한 금액을 각 사업연도 소득에 대한 법인세로서 납부하여야 한다</string>
-    <string name="qtitle">소득세법</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
     <string name="lock_slide_set">잠금 슬라이드 설정</string>
@@ -10,4 +8,12 @@
     <string name="ox_quize">OX 퀴즈</string>
     <string name="wrong_answer">오답 노트</string>
     <string name="setting">설정</string>
+    <string name="dp">Dark Purple</string>
+    <string name="db">Dark Blue</string>
+    <string name="dgr">Dark Grey</string>
+    <string name="dg">Dark Green</string>
+    <string name="ly">Light Yellow</string>
+    <string name="lp">Light Pink</string>
+    <string name="lg">Light Grey</string>
+    <string name="ls">Light SY</string>
 </resources>
