@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LockQuizeKotlin</string>
+    <string name="app_name">너란 별</string>
     <string name="qcontent">내국법인은 각 사업연도의 소득에 대한 법인세 산출세액에 해당 사업연도에 원천징수 된 세액을 합산한 금액을 각 사업연도 소득에 대한 법인세로서 납부하여야 한다</string>
     <string name="qtitle">소득세법</string>
     <string name="no">NO</string>

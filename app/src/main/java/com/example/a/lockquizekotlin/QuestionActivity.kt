@@ -119,10 +119,10 @@ class QuestionActivity : AppCompatActivity() {
 
     private fun updateStar(){
         if (incorrectList.contains(questionList[currentQuestionIndex])){ // 오답노트에 있는 내용이면 붉은 별로
-            qa_star_button.setBackgroundResource(R.drawable.wrsen)
+            qa_star_button.setBackgroundResource(R.drawable.red_star)
         }
         else { // 오답노트에 없는 내용이면 노란 별로
-            qa_star_button.setBackgroundResource(R.drawable.wrsin)
+            qa_star_button.setBackgroundResource(R.drawable.yellow_star)
         }
     }
 
