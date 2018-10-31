@@ -15,20 +15,20 @@
         <activity android:name=".MainActivity" />
 
         <service
-            android:name=".LockScreenService"
+            android:name=".LockScreen.LockScreenService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".UnlockCaptureService"
+            android:name=".LockScreen.UnlockCaptureService"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name=".UnlockReceiver"
+            android:name=".LockScreen.UnlockReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".RestartReceiver"
+            android:name=".LockScreen.RestartReceiver"
             android:enabled="true"
             android:exported="true" />
 
@@ -41,7 +41,8 @@
         </activity>
         <activity android:name=".SettingActivitiy" />
         <activity android:name=".MenuActivity" />
-        <activity android:name=".CategoryListActivity"></activity>
+        <activity android:name=".CategoryListActivity" />
+        <activity android:name=".QuestionActivity"></activity>
     </application>
 
 </manifest>

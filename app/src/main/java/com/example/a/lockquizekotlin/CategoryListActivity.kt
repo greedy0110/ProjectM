@@ -1,5 +1,8 @@
 package com.example.a.lockquizekotlin
 
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.BaseColumns
@@ -19,6 +22,7 @@ class CategoryListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categorylist)
 
+        val isOx = intent.extras.getBoolean("ox")
         // category_entry 테이블을 읽어와서
         val categoryTable = readAllCategoryTable()
 
@@ -30,7 +34,24 @@ class CategoryListActivity : AppCompatActivity() {
             button.text = entry.category
             button.id = entry.id
             button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            button.background.alpha = 0
+            button.setTextColor(Color.WHITE) // TODO 텍스트 컬러를 동적으로 바꿔주고 있긴한데.... 어캐할까?
             category_list.addView(button)
+
+            button.setOnClickListener {
+                if (isOx) { // 오답 노트용 QuestionActivity를 만들어야 한다.
+                    val intent = Intent(applicationContext, QuestionActivity::class.java)
+                    intent.putExtra("ox", true)
+                    intent.putExtra("category_id", entry.id)
+                    startActivity(intent)
+                }
+                else {
+                    val intent = Intent(applicationContext, QuestionActivity::class.java)
+                    intent.putExtra("ox", false)
+                    intent.putExtra("category_id", entry.id)
+                    startActivity(intent)
+                }
+            }
         }
 
 

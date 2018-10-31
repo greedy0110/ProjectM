@@ -1,4 +1,4 @@
-package com.example.a.lockquizekotlin
+package com.example.a.lockquizekotlin.LockScreen
 
 import android.app.AlarmManager
 import android.app.Notification
@@ -7,21 +7,19 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
 import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
-import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.support.v4.app.NotificationCompat
 import android.app.NotificationChannel
 import android.app.NotificationManager
-
+import com.example.a.lockquizekotlin.MainActivity
 
 
 class UnlockCaptureService : Service() {
     val TAG: String = "UnlockCaptureService"
-    var mReceiver:UnlockReceiver? = null
+    var mReceiver: UnlockReceiver? = null
 
     override fun onBind(intent: Intent): IBinder? {
         TODO("Return the communication channel to the service.")

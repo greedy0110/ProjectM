@@ -20,6 +20,7 @@ class SplashActivity : AppCompatActivity() {
             this@SplashActivity.finish()
 
         }, delayTime)
+        // TODO 이거 꼭 없애야한다! 이거 있으면 오답노트 내용 다 날라갈 것 (테스트 끝나면 바로 제거해야함!!)
         DbUtils.saveDbAssetToDevice(applicationContext, true) // 초기 DB 파일 다시 쓰기
     }
 }

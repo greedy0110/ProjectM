@@ -1,4 +1,4 @@
-package com.example.a.lockquizekotlin
+package com.example.a.lockquizekotlin.LockScreen
 
 import android.content.BroadcastReceiver
 import android.content.Context

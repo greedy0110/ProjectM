@@ -20,7 +20,9 @@ object IncorrectContract {
         const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS $TABLE_NAME"
     }
 
-    data class Entry(val id: Long, val question_id: Int)
+    data class Entry(val id: Int, val question_id: Int)
+
+    data class EntryEasy(val id: Int, val question: String)
 
     class DbHelper(context: Context) : SQLiteOpenHelper(context, "${DbUtils.PACKAGE_DIR}/${DbUtils.DATABASE_NAME}", null, DATABASE_VERSION) {
         init {

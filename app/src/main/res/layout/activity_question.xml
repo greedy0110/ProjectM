@@ -8,11 +8,12 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/background"
+        android:id="@+id/qa_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/db_back"
         android:contentDescription="@string/app_name"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,26 +22,58 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/ls_star_button"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="8dp"
+        android:id="@+id/qa_star_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/wrsin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/qa_end_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/upper_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/qa_next_question_button"
+        android:layout_width="30dp"
+        android:layout_height="55dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/lgmcs"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/lgmqr"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/qa_prev_question_button"
+        android:layout_width="30dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/lgmql"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/qquestion_textview"
+        android:id="@+id/qa_qquestion_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="8dp"
-        android:text="CONTEXT"
+        android:text="QUESTION"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,7 +83,7 @@
         app:layout_constraintVertical_bias="0.453" />
 
     <TextView
-        android:id="@+id/qcategory_textview"
+        android:id="@+id/qa_qcategory_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -58,12 +91,12 @@
         android:layout_marginBottom="16dp"
         android:text="CATEGORY"
         android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toTopOf="@+id/qquestion_textview"
+        app:layout_constraintBottom_toTopOf="@+id/qa_qquestion_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/no_button"
+        android:id="@+id/qa_no_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -73,19 +106,19 @@
         android:background="@drawable/db_sx"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.863"
-        app:layout_constraintStart_toEndOf="@+id/yes_button"
+        app:layout_constraintHorizontal_bias="0.844"
+        app:layout_constraintStart_toEndOf="@+id/qa_yes_button"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.9" />
 
     <Button
-        android:id="@+id/yes_button"
+        android:id="@+id/qa_yes_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/db_so"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.119"
+        app:layout_constraintHorizontal_bias="0.128"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.887" />

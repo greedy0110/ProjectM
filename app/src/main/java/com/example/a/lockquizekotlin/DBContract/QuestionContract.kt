@@ -9,15 +9,16 @@ object QuestionContract {
     object Schema : BaseColumns{
         const val TABLE_NAME = "question_entry"
         const val COLUMN_ID = "id"
-        const val COLUMN_NAME_CATEGORY_ID = "category_id"
+        const val COLUMN_NAME_YEAR = "year"
+        const val COLUMN_NAME_CATEGORY = "category"
         const val COLUMN_NAME_QUESTION = "question"
         const val COLUMN_NAME_ANSWER = "answer"
 
-        const val SQL_CREATE_ENTRIES = "CREATE TABLE $TABLE_NAME ( $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_NAME_CATEGORY_ID  INTEGER NOT NULL, $COLUMN_NAME_QUESTION TEXT NOT NULL, $COLUMN_NAME_ANSWER TEXT NOT NULL, FOREIGN KEY($COLUMN_NAME_CATEGORY_ID) REFERENCES ${CategoryContract.Schema.TABLE_NAME}(${CategoryContract.Schema.COLUMN_ID}) )"
+        const val SQL_CREATE_ENTRIES = "CREATE TABLE $TABLE_NAME ( $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_NAME_YEAR TEXT ,$COLUMN_NAME_CATEGORY  TEXT NOT NULL, $COLUMN_NAME_QUESTION TEXT NOT NULL, $COLUMN_NAME_ANSWER TEXT NOT NULL)"
         const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS $TABLE_NAME"
     }
 
-    data class Entry(val id: Long, val category: String, val question: String, val answer: String)
+    data class Entry(val id: Int, val year: String, val category: String, val question: String, val answer: String)
 
     class DbHelper(context: Context) : SQLiteOpenHelper(context, "${DbUtils.PACKAGE_DIR}/${DbUtils.DATABASE_NAME}", null, DATABASE_VERSION) {
         init {
