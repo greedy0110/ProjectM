@@ -40,6 +40,10 @@ class SlideOnOffSettingActivity : AppCompatActivity() {
             AndroidComponentUtils.stopUnlockCaptureService(applicationContext)
             updateUI(false)
         }
+
+        asoos_star_button.setOnClickListener {
+            LayoutUtils.goToMenuActivity(applicationContext)
+        }
     }
 
     override fun onStart() {

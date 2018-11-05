@@ -37,5 +37,9 @@ class SettingActivitiy : AppCompatActivity() {
             val intent = Intent(applicationContext, SlideSettingsActivity::class.java)
             startActivity(intent)
         }
+
+        as_star_button.setOnClickListener {
+            LayoutUtils.goToMenuActivity(applicationContext)
+        }
     }
 }

@@ -1,11 +1,13 @@
 package com.example.a.lockquizekotlin.Utils
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.MenuActivity
 
 object LayoutUtils {
     fun findTextViews(context: Context, v: View): List<TextView> {
@@ -57,5 +59,10 @@ object LayoutUtils {
 
         left.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_left"))
         right.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_right"))
+    }
+
+    fun goToMenuActivity(context: Context) {
+        val intent = Intent(context, MenuActivity::class.java)
+        context.startActivity(intent)
     }
 }

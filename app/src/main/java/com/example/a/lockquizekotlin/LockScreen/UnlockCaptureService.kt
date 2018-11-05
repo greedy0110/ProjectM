@@ -14,7 +14,7 @@ import android.media.RingtoneManager
 import android.support.v4.app.NotificationCompat
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import com.example.a.lockquizekotlin.MainActivity
+import com.example.a.lockquizekotlin.SplashActivity
 
 
 class UnlockCaptureService : Service() {
@@ -104,7 +104,7 @@ class UnlockCaptureService : Service() {
 
         val builder = NotificationCompat.Builder(applicationContext, channelId)
 
-        val notificationIntent = Intent(applicationContext, MainActivity::class.java)
+        val notificationIntent = Intent(applicationContext, SplashActivity::class.java)
 
         notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 

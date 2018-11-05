@@ -26,6 +26,10 @@ class SlideSettingsActivity : AppCompatActivity() {
             val intent = Intent(applicationContext, SlideOnOffSettingActivity::class.java)
             startActivity(intent)
         }
+
+        ass_star_button.setOnClickListener {
+            LayoutUtils.goToMenuActivity(applicationContext)
+        }
     }
 
     override fun onStart() {

@@ -25,6 +25,10 @@ class ForceLockSettingActivity : AppCompatActivity() {
         select_force_period_button.setOnClickListener {
             showSelectTimeDialog()
         }
+
+        afls_star_button.setOnClickListener {
+            LayoutUtils.goToMenuActivity(applicationContext)
+        }
     }
 
     override fun onStart() {

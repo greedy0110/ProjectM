@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="android:buttonStyle">@style/ButtonStyle</item>
         <item name="android:editTextStyle">@style/EditTextStyle</item>
@@ -24,6 +25,9 @@
     </style>
 
     <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <!--이거 하면 기본 버튼 누르는 효과 사라져야 하는데 ㅡㅡ-->
+        <!--TODO 기본 버튼 누르는 효과 제거해야함-->
+        <item name="android:stateListAnimator">@null</item>
         <item name="android:fontFamily">@font/nanum_gothic_coding</item>
     </style>
 

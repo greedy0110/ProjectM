@@ -31,7 +31,7 @@ class CategoryListActivity : AppCompatActivity() {
             val button = Button(applicationContext)
             button.text = entry.category
             button.id = entry.id
-            button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             button.background.alpha = 0
             button.setTextColor(Color.WHITE) // TODO 텍스트 컬러를 동적으로 바꿔주고 있긴한데.... 어캐할까?
             category_list.addView(button)
@@ -52,6 +52,9 @@ class CategoryListActivity : AppCompatActivity() {
             }
         }
 
+        acl_star_button.setOnClickListener{
+            LayoutUtils.goToMenuActivity(applicationContext)
+        }
 
     }
 

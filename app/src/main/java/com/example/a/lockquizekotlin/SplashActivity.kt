@@ -22,7 +22,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // delayTime / 1000 초의 지연시간후에 mainActivity를 켜주자.
+        // delayTime / 1000 초의 지연시간후에 menuActivity를 켜주자.
         val delayTime = 1000L
         Handler().postDelayed({
             val menuIntent = Intent(this@SplashActivity, MenuActivity::class.java)
