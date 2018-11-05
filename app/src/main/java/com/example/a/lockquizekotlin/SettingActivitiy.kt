@@ -27,7 +27,14 @@ class SettingActivitiy : AppCompatActivity() {
 
     private fun setButtonEvents() {
         skin_setting_button.setOnClickListener {
+            Log.d(TAG, "skin setting 클릭")
             val intent = Intent(applicationContext, SelectThemeActivity::class.java)
+            startActivity(intent)
+        }
+
+        lock_slide_setting_button.setOnClickListener {
+            Log.d(TAG, "lock slide setting 클릭")
+            val intent = Intent(applicationContext, SlideSettingsActivity::class.java)
             startActivity(intent)
         }
     }

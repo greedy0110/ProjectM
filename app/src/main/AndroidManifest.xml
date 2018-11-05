@@ -45,7 +45,10 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".CategoryListActivity" />
         <activity android:name=".QuestionActivity" />
-        <activity android:name=".SelectThemeActivity"></activity>
+        <activity android:name=".SelectThemeActivity" />
+        <activity android:name=".SlideSettingsActivity" />
+        <activity android:name=".SlideOnOffSettingActivity" />
+        <activity android:name=".ForceLockSettingActivity"></activity>
     </application>
 
 </manifest>

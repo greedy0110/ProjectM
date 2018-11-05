@@ -38,7 +38,7 @@ class MenuActivity : AppCompatActivity() {
             startActivity(setting)
         }
 
-        startUnlockCaptureService()
+
     }
 
     override fun onStart() {
@@ -47,39 +47,5 @@ class MenuActivity : AppCompatActivity() {
     }
 
 
-    private fun startUnlockCaptureService() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (!Settings.canDrawOverlays(applicationContext)) {
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-                startActivityForResult(intent, 1234)
-            } else {
-                startUnlockCaptureServiceNoVersionCheck()
-            }
-        }
-        else {
-            startUnlockCaptureServiceNoVersionCheck()
-        }
-    }
 
-    private fun startUnlockCaptureServiceNoVersionCheck(){
-        val intent = Intent(applicationContext, UnlockCaptureService::class.java)
-        applicationContext?.startService(intent)
-    }
-
-    private fun stopUnlockCaptureService(){
-        val intent = Intent(applicationContext, UnlockCaptureService::class.java)
-        applicationContext?.stopService(intent)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode) {
-            1234 -> {
-                if (resultCode == Activity.RESULT_OK)
-                    startUnlockCaptureServiceNoVersionCheck()
-                else
-                    startUnlockCaptureService()
-            }
-        }
-    }
 }

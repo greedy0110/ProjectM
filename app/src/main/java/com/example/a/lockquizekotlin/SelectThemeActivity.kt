@@ -58,8 +58,8 @@ class SelectThemeActivity : AppCompatActivity() {
     }
 
     private fun onThemeChangeClick(theme: String){
-        // 0. 버튼은 thema text 를 알수 있다.
-        // 1. db에 thema 를 저장한다.
+        // 0. 버튼은 theme text 를 알수 있다.
+        // 1. db에 theme 를 저장한다.
         SettingsContract.setTheme(applicationContext, theme)
         // 2. 스킨이 UI에 적용된다. (각 activity가 onstart일때, 세팅값을 확인하고 ui를 적용한다면?)
         LayoutUtils.setTheme(applicationContext, activity_select_theme_layout)

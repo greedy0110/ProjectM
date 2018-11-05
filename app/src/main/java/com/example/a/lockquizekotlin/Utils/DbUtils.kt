@@ -1,4 +1,4 @@
-package com.example.a.lockquizekotlin.DBContract
+package com.example.a.lockquizekotlin.Utils
 
 import android.content.Context
 import android.content.res.AssetManager

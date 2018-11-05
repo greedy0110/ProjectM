@@ -8,6 +8,22 @@
     android:background="@drawable/db_back"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/drag_button_view"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/no_button"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/yes_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/db_sbutton" />
+
     <Button
         android:id="@+id/ls_star_button"
         android:layout_width="35dp"

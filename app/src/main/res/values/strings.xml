@@ -16,4 +16,16 @@
     <string name="lp">Light Pink</string>
     <string name="lg">Light Grey</string>
     <string name="ls">Light SY</string>
+    <string name="slide_onoff_setting">슬라이드 켜기 / 끄기</string>
+    <string name="force_lock_setting" >강제 잠금 설정</string>
+    <string name="force_lock_setting_desc">
+        오답일 경우 바로 다른 답을 선택하여\n
+        틀린 문제를 그냥 넘기게 되는 것을 방지하고\n
+        다시 생각하여 풀 수 있도록\n
+        강제 잠금 시간을\n
+        설정합니다.
+    </string>
+    <string name="on">켜기</string>
+    <string name="off">끄기</string>
+    <string name="forceLockDialogTitle">시간 선택</string>
 </resources>

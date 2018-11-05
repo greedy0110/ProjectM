@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import com.example.a.lockquizekotlin.Utils.DbUtils
 
 object QuestionContract {
     object Schema : BaseColumns{

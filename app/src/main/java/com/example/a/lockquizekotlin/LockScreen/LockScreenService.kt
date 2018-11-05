@@ -6,19 +6,24 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.a.lockquizekotlin.DBContract.QuestionContract
 import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import com.example.a.lockquizekotlin.R
-import com.example.a.lockquizekotlin.R.id.activity_select_theme_layout
+import com.example.a.lockquizekotlin.R.id.*
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
+import com.example.a.lockquizekotlin.Utils.MathUtils
 import com.example.a.lockquizekotlin.Utils.ResourceUtils
+import kotlinx.android.synthetic.main.activity_question.*
 import kotlinx.android.synthetic.main.activity_select_theme.*
 import java.util.*
 
@@ -28,6 +33,16 @@ class LockScreenService : Service() {
     var mWindowManager: WindowManager? = null
     private var questionDbHelper: QuestionContract.DbHelper? = null
     private var answer: String = ""
+    // 문제 틀리고 해당 시간 아무것도 못하고 문제틀린것 확인가능 ㅎㅎ;
+    private var forceLockPeriod = SettingsContract.Schema.DEFAULT_SLIDE_FORCE_PERIOD
+
+    private var dx: Float = 0F
+    private var dy: Float = 0F
+    private var originX: Float = 0F
+    private var yesButtonX: Float = 0F
+    private var noButtonX: Float = 0F
+    private var checkNear: Float = 150F
+    private var moveableReach: Float = 0F
 
     override fun onBind(intent: Intent): IBinder? {
         TODO("Return the communication channel to the service.")
@@ -35,7 +50,9 @@ class LockScreenService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG, "onStartCommand")
+        Log.d(TAG, "onStartCommand ${intent?.extras?.getInt("forceLockPeriod")}")
+        val flp = intent?.extras?.getInt("forceLockPeriod")
+        flp?.let { forceLockPeriod = flp }
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -47,44 +64,11 @@ class LockScreenService : Service() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mView = inflater.inflate(R.layout.lock_screen, null)
 
-        val yesBtn = mView?.findViewById(R.id.yes_button) as Button?
-        yesBtn?.setOnClickListener {
-            Log.d(TAG, "yes button click")
-            when(answer) {
-                "o" -> {
-                    unlockLookScreen()
-                    Toast.makeText(applicationContext, "정답입니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                }
-                else -> {
-                    Log.d(TAG, "오답입니다~ 못나가세요")
-                    Toast.makeText(applicationContext, "오답입니다! 못나갑니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                }
-            }
-        }
-        val noBtn = mView?.findViewById(R.id.no_button) as Button?
-        noBtn?.setOnClickListener {
-            Log.d(TAG, "no button click")
-            when(answer) {
-                "x" -> {
-                    unlockLookScreen()
-                    Toast.makeText(applicationContext, "정답입니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                }
-                else -> {
-                    Log.d(TAG, "오답이야 못나가!")
-                    Toast.makeText(applicationContext, "오답입니다! 못나갑니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                }
-            }
-        }
-
-//        val backgroundImage = mView?.findViewById(R.id.background) as ImageView?
-//        backgroundImage?.let {
-//            // 대체 왜인지는 모르겠으나 여기서 이미지 리소스를 지정해주어야한다.
-//            backgroundImage.setImageResource(R.drawable.ic_launcher_background)
-//        }
         val layout = mView?.findViewById(R.id.lock_screen_layout) as View
         LayoutUtils.setTheme(applicationContext, layout)
 
         selectDisplayQuestion()
+        initDraggableButton()
 
         val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else
@@ -115,6 +99,97 @@ class LockScreenService : Service() {
 
     private fun unlockLookScreen(){
         stopSelf()
+    }
+
+    private fun shakeQuestion(){
+        val shake = AnimationUtils.loadAnimation(applicationContext, R.anim.shake)
+
+        mView?.findViewById<View>(R.id.qquestion_textview)?.startAnimation(shake)
+        mView?.findViewById<View>(R.id.qcategory_textview)?.startAnimation(shake)
+    }
+
+    private fun initDraggableButton() {
+        val drag_button_view = mView?.findViewById<View>(R.id.drag_button_view)
+        val yes_button = mView?.findViewById<Button>(R.id.yes_button)
+        val no_button = mView?.findViewById<Button>(R.id.no_button)
+        drag_button_view?.post { // qa_drag_button_view 가 초기화 된후 실행 될거라 originX가 잘 저장될것이다.
+            originX = drag_button_view.x
+            yes_button?.post {
+                yesButtonX = yes_button.x
+                moveableReach = Math.max(moveableReach, Math.abs(yesButtonX - originX))
+            }
+
+            no_button?.post {
+                noButtonX = no_button.x
+                moveableReach = Math.max(moveableReach, Math.abs(noButtonX - originX))
+            }
+        }
+
+        if (drag_button_view != null && yes_button != null && no_button != null) {
+            LayoutUtils.setSlideButtonTheme(applicationContext, drag_button_view, yes_button, no_button)
+        }
+
+        drag_button_view?.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    dx = v.x - event.rawX
+                    //dy = v.y - event.rawY Y 축으로 이동을 제한!
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    var newX = event.rawX + dx
+                    newX = MathUtils.clamp(newX, originX-moveableReach, originX+moveableReach)
+                    v.animate()
+                            .x(newX)
+                            //.y(event.rawY + dy) Y 축으로 이동을 제한!
+                            .setDuration(0)
+                            .start()
+                }
+                MotionEvent.ACTION_UP -> {
+                    dx = 0F
+
+                    // yes / no 는 그 시점에 문제 정답에 따라 다른 행동을 한다.
+                    // 정답일 경우 => 정답임을 띄워주고 (이미지뷰 처리)
+                    // 오답일 경우 => 오답임을 경고하고 오답 노트에 추가한다. (오답 노트에 없다면!)
+                    when (v.x) {
+                        in yesButtonX-checkNear..yesButtonX+checkNear -> {
+                            Log.d(TAG, "yes button drag click")
+                            when(answer) {
+                                "o" -> {
+                                    unlockLookScreen()
+                                    Toast.makeText(applicationContext, "정답입니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
+                                }
+                                else -> {
+                                    Log.d(TAG, "오답입니다~ 못나가세요")
+                                    Toast.makeText(applicationContext, "오답입니다! 못나갑니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
+                                }
+                            }
+                        }
+                        in noButtonX-checkNear..noButtonX+checkNear -> {
+                            Log.d(TAG, "no button drag click")
+                            when(answer) {
+                                "x" -> {
+                                    unlockLookScreen()
+                                    Toast.makeText(applicationContext, "정답입니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
+                                }
+                                else -> {
+                                    Log.d(TAG, "오답이야 못나가!")
+                                    shakeQuestion()
+                                    Toast.makeText(applicationContext, "오답입니다! 못나갑니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
+                                }
+                            }
+                        }
+                    }
+
+                    v.animate() // 손을 때면 원위치로 부드럽게 이동하자.
+                            .x(originX)
+                            .setDuration(300) // 높게 지정할 수록 부드럽게, 느리게 원위치 할것이야~
+                            .start()
+                }
+                else ->
+                    return@setOnTouchListener false
+            }
+            return@setOnTouchListener true
+        }
     }
 
     private fun selectDisplayQuestion() {

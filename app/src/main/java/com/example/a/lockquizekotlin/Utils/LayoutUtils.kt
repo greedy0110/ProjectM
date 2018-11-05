@@ -43,4 +43,19 @@ object LayoutUtils {
             tv.setTextColor(textColor)
         }
     }
+
+    fun setSlideButtonTheme(context: Context, slide: View, o: View, x: View) {
+        val theme = SettingsContract.getCurrentTheme(context)
+
+        slide.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_sbutton"))
+        o.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_so"))
+        x.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_sx"))
+    }
+
+    fun setSlideLeftRightTheme(context: Context, left:View, right: View) {
+        val theme = SettingsContract.getCurrentTheme(context)
+
+        left.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_left"))
+        right.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_right"))
+    }
 }

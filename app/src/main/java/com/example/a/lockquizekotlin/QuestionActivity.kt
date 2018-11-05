@@ -1,17 +1,20 @@
 package com.example.a.lockquizekotlin
 
 import android.content.ContentValues
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.example.a.lockquizekotlin.DBContract.CategoryContract
 import com.example.a.lockquizekotlin.DBContract.IncorrectContract
 import com.example.a.lockquizekotlin.DBContract.QuestionContract
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.R.id.*
+import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
-import com.example.a.lockquizekotlin.Utils.ResourceUtils
+import com.example.a.lockquizekotlin.Utils.MathUtils
 import kotlinx.android.synthetic.main.activity_question.*
 import java.util.*
 
@@ -24,12 +27,20 @@ class QuestionActivity : AppCompatActivity() {
     private var questionList = listOf<QuestionContract.Entry>()
     private var incorrectList = mutableListOf<QuestionContract.Entry>()
     private var currentQuestionIndex = -1
+    private var dx: Float = 0F
+    private var dy: Float = 0F
+    private var originX: Float = 0F
+    private var yesButtonX: Float = 0F
+    private var noButtonX: Float = 0F
+    private var checkNear: Float = 150F
+    private var moveableReach: Float = 0F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question)
 
         setButtonEvents()
+
 
         justCategory = intent.extras.getBoolean("ox")
         if (justCategory) { // 카테고리에 해당하는 문제 나열 용
@@ -56,9 +67,14 @@ class QuestionActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onStart() {
         super.onStart()
         LayoutUtils.setTheme(applicationContext, activity_question_layout)
+        LayoutUtils.setSlideButtonTheme(applicationContext, qa_drag_button_view, qa_yes_button, qa_no_button)
+        LayoutUtils.setSlideLeftRightTheme(applicationContext, qa_prev_question_button, qa_next_question_button)
+
+        initDraggableButton()
     }
 
     private fun setButtonEvents(){
@@ -74,41 +90,111 @@ class QuestionActivity : AppCompatActivity() {
             finish()
         }
 
-        // yes / no 는 그 시점에 문제 정답에 따라 다른 행동을 한다.
-        // 정답일 경우 => 정답임을 띄워주고 (이미지뷰 처리)
-        // 오답일 경우 => 오답임을 경고하고 오답 노트에 추가한다. (오답 노트에 없다면!)
-        qa_yes_button.setOnClickListener {
-            if (currentQuestionIndex < 0 || currentQuestionIndex >= questionList.size) return@setOnClickListener
-            when (questionList[currentQuestionIndex].answer) {
-                "o" -> correctAnswer()
-                "x" -> wrongAnswer()
+        qa_star_button.setOnClickListener {
+            if (incorrectList.contains(questionList[currentQuestionIndex])){ // 오답노트에 있는 내용이면 오답노트에서 제거하고 노란색으로 다시 바꾸자!
+                deleteQuestionOnIncorrectEntryTable(questionList[currentQuestionIndex].id)
+                incorrectList.remove(questionList[currentQuestionIndex])
+                Toast.makeText(applicationContext, "오답노트에서 제거 했어요", Toast.LENGTH_SHORT).show()
+                updateStar()
+            }
+        }
+    }
+
+    private fun initDraggableButton() {
+        qa_drag_button_view.post { // qa_drag_button_view 가 초기화 된후 실행 될거라 originX가 잘 저장될것이다.
+            originX = qa_drag_button_view.x
+            qa_yes_button.post {
+                yesButtonX = qa_yes_button.x
+                moveableReach = Math.max(moveableReach, Math.abs(yesButtonX - originX))
+            }
+
+            qa_no_button.post {
+                noButtonX = qa_no_button.x
+                moveableReach = Math.max(moveableReach, Math.abs(noButtonX - originX))
             }
         }
 
-        qa_no_button.setOnClickListener {
-            if (currentQuestionIndex < 0 || currentQuestionIndex >= questionList.size) return@setOnClickListener
-            when (questionList[currentQuestionIndex].answer) {
-                "o" -> wrongAnswer()
-                "x" -> correctAnswer()
+
+        qa_drag_button_view.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    dx = v.x - event.rawX
+                    //dy = v.y - event.rawY Y 축으로 이동을 제한!
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    var newX = event.rawX + dx
+                    newX = MathUtils.clamp(newX, originX-moveableReach, originX+moveableReach)
+                    v.animate()
+                            .x(newX)
+                            //.y(event.rawY + dy) Y 축으로 이동을 제한!
+                            .setDuration(0)
+                            .start()
+                }
+                MotionEvent.ACTION_UP -> {
+                    dx = 0F
+
+                    // yes / no 는 그 시점에 문제 정답에 따라 다른 행동을 한다.
+                    // 정답일 경우 => 정답임을 띄워주고 (이미지뷰 처리)
+                    // 오답일 경우 => 오답임을 경고하고 오답 노트에 추가한다. (오답 노트에 없다면!)
+                    when (v.x) {
+                        in yesButtonX-checkNear..yesButtonX+checkNear -> {
+                            Log.d(TAG, "yes button click by drag")
+                            if (currentQuestionIndex >= 0 && currentQuestionIndex < questionList.size) {
+                                when (questionList[currentQuestionIndex].answer) {
+                                    "o" -> correctAnswer()
+                                    "x" -> wrongAnswer()
+                                }
+                            }
+                        }
+                        in noButtonX-checkNear..noButtonX+checkNear -> {
+                            Log.d(TAG, "no button click by drag")
+                            if (currentQuestionIndex >= 0 && currentQuestionIndex < questionList.size) {
+                                when (questionList[currentQuestionIndex].answer) {
+                                    "o" -> wrongAnswer()
+                                    "x" -> correctAnswer()
+                                }
+                            }
+                        }
+                    }
+
+                    v.animate() // 손을 때면 원위치로 부드럽게 이동하자.
+                            .x(originX)
+                            .setDuration(300) // 높게 지정할 수록 부드럽게, 느리게 원위치 할것이야~
+                            .start()
+                }
+                else ->
+                    return@setOnTouchListener false
             }
+            return@setOnTouchListener true
         }
     }
 
     private fun wrongAnswer() {
         Toast.makeText(applicationContext, "오답입니다.", Toast.LENGTH_SHORT).show()
         checkIncorrect(questionList[currentQuestionIndex])
+//        val prevBackground = activity_question_layout.background
+        activity_question_layout.setBackgroundResource(R.drawable.w_back)
         updateStar()
+        shakeQuestion()
+        AndroidComponentUtils.postDelayedLaunch({
+//            activity_question_layout.background = prevBackground
+            LayoutUtils.setTheme(applicationContext, activity_question_layout)
+        }, 1000)
     }
 
     private fun correctAnswer() {
         Toast.makeText(applicationContext, "정답입니다.", Toast.LENGTH_SHORT).show()
-        goNextQuestion()
+        qa_check_image.visibility = View.VISIBLE
+        AndroidComponentUtils.postDelayedLaunch({
+            qa_check_image.visibility = View.INVISIBLE
+            goNextQuestion()
+        }, 1000)
     }
 
     private fun checkIncorrect(entry: QuestionContract.Entry) {
         // incorrect_table 에 적용이 안된 녀석이면, 써준다.
         if (!hasQuestionInIncorrectEntryTable(entry.id)) {
-            if (insertQuestionIntoIncoorectEntryTable(entry.id)){
+            if (insertQuestionIntoIncorrectEntryTable(entry.id)){
                 incorrectList.add(entry)
                 Toast.makeText(applicationContext, "오답노트에 체크하였습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -151,6 +237,13 @@ class QuestionActivity : AppCompatActivity() {
         }
         setQuestionUIByIndex(--currentQuestionIndex)
         return true
+    }
+
+    private fun shakeQuestion(){
+        val shake = AnimationUtils.loadAnimation(applicationContext, R.anim.shake)
+
+        qa_qcategory_textview.startAnimation(shake)
+        qa_qquestion_textview.startAnimation(shake)
     }
 
     // category_id에 해당하는 문제 목록을 반환하자
@@ -313,7 +406,7 @@ class QuestionActivity : AppCompatActivity() {
         return cursor?.count != 0
     }
 
-    private fun insertQuestionIntoIncoorectEntryTable(question_id: Int): Boolean{
+    private fun insertQuestionIntoIncorrectEntryTable(question_id: Int): Boolean{
         questionDbHelper = QuestionContract.DbHelper(applicationContext)
         val qdb = questionDbHelper?.readableDatabase
 
@@ -327,5 +420,13 @@ class QuestionActivity : AppCompatActivity() {
             return false
         }
         return true
+    }
+
+    private fun deleteQuestionOnIncorrectEntryTable(question_id: Int) {
+        questionDbHelper = QuestionContract.DbHelper(applicationContext)
+        val qdb = questionDbHelper?.readableDatabase
+
+        qdb?.delete(IncorrectContract.Schema.TABLE_NAME, "${IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID} = ?",
+                arrayOf(question_id.toString()))
     }
 }

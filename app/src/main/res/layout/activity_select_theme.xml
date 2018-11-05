@@ -25,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="31dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="25dp"
         android:orientation="horizontal"
@@ -39,13 +39,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="top|center"
+            android:gravity="center"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/dp_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/dp" />
 
             <TextView
@@ -58,8 +58,8 @@
 
             <Button
                 android:id="@+id/db_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/db" />
 
             <TextView
@@ -72,8 +72,8 @@
 
             <Button
                 android:id="@+id/dgr_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/dgr" />
 
             <TextView
@@ -86,8 +86,8 @@
 
             <Button
                 android:id="@+id/dg_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/dg" />
 
             <TextView
@@ -104,13 +104,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="top|center"
+            android:gravity="center"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/ly_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/ly" />
 
             <TextView
@@ -123,8 +123,8 @@
 
             <Button
                 android:id="@+id/lp_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/lp" />
 
             <TextView
@@ -137,8 +137,8 @@
 
             <Button
                 android:id="@+id/lg_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/lg" />
 
             <TextView
@@ -151,8 +151,8 @@
 
             <Button
                 android:id="@+id/ls_button"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="@drawable/ls" />
 
             <TextView
