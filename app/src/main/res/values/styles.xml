@@ -24,11 +24,10 @@
         <item name="android:fontFamily">@font/nanum_gothic_coding</item>
     </style>
 
-    <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <!--이거 하면 기본 버튼 누르는 효과 사라져야 하는데 ㅡㅡ-->
-        <!--TODO 기본 버튼 누르는 효과 제거해야함-->
+    <style name="ButtonStyle">
         <item name="android:stateListAnimator">@null</item>
         <item name="android:fontFamily">@font/nanum_gothic_coding</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="EditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
