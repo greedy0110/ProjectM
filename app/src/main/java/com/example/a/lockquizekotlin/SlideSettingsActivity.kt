@@ -27,8 +27,8 @@ class SlideSettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        ass_star_button.setOnClickListener {
-            LayoutUtils.goToMenuActivity(applicationContext)
+        ass_end_button.setOnClickListener {
+            LayoutUtils.goBack(this)
         }
     }
 

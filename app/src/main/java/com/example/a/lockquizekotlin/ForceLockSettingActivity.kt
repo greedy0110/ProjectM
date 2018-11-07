@@ -26,8 +26,8 @@ class ForceLockSettingActivity : AppCompatActivity() {
             showSelectTimeDialog()
         }
 
-        afls_star_button.setOnClickListener {
-            LayoutUtils.goToMenuActivity(applicationContext)
+        afls_end_button.setOnClickListener {
+            LayoutUtils.goBack(this)
         }
     }
 

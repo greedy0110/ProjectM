@@ -1,17 +1,15 @@
 package com.example.a.lockquizekotlin
 
 import android.content.Intent
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import com.example.a.lockquizekotlin.DBContract.CategoryContract
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
-import com.example.a.lockquizekotlin.Utils.ResourceUtils
 import kotlinx.android.synthetic.main.activity_categorylist.*
+import kotlinx.android.synthetic.main.activity_menu.*
 
 class CategoryListActivity : AppCompatActivity() {
     private val TAG = "CategoryListActivity"
@@ -33,7 +31,6 @@ class CategoryListActivity : AppCompatActivity() {
             button.id = entry.id
             button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             button.background.alpha = 0
-            button.setTextColor(Color.WHITE) // TODO 텍스트 컬러를 동적으로 바꿔주고 있긴한데.... 어캐할까?
             category_list.addView(button)
 
             button.setOnClickListener {
@@ -52,10 +49,9 @@ class CategoryListActivity : AppCompatActivity() {
             }
         }
 
-        acl_star_button.setOnClickListener{
-            LayoutUtils.goToMenuActivity(applicationContext)
+        acl_end_button.setOnClickListener {
+            LayoutUtils.goBack(this)
         }
-
     }
 
     override fun onStart() {

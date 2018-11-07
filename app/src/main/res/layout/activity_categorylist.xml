@@ -8,6 +8,16 @@
     android:background="@drawable/db_back"
     tools:context=".MenuActivity">
 
+    <Button
+        android:id="@+id/acl_end_button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/upper_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/acl_star_button"
         android:layout_width="35dp"

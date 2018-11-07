@@ -37,8 +37,6 @@ class MenuActivity : AppCompatActivity() {
             val setting = Intent(applicationContext, SettingActivitiy::class.java)
             startActivity(setting)
         }
-
-
     }
 
     override fun onStart() {

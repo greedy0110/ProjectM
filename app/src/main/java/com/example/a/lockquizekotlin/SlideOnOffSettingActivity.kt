@@ -41,8 +41,8 @@ class SlideOnOffSettingActivity : AppCompatActivity() {
             updateUI(false)
         }
 
-        asoos_star_button.setOnClickListener {
-            LayoutUtils.goToMenuActivity(applicationContext)
+        asoos_end_button.setOnClickListener {
+            LayoutUtils.goBack(this)
         }
     }
 

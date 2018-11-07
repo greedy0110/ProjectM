@@ -1,5 +1,6 @@
 package com.example.a.lockquizekotlin.Utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -64,5 +65,9 @@ object LayoutUtils {
     fun goToMenuActivity(context: Context) {
         val intent = Intent(context, MenuActivity::class.java)
         context.startActivity(intent)
+    }
+
+    fun goBack(activity: Activity) {
+        activity.finish()
     }
 }

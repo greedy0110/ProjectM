@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".SlideOnOffSettingActivity">
 
+    <Button
+        android:id="@+id/asoos_end_button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/upper_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/asoos_check_on_image"
         android:layout_width="60dp"

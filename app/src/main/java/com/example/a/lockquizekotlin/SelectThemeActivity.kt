@@ -56,8 +56,8 @@ class SelectThemeActivity : AppCompatActivity() {
             onThemeChangeClick("ls")
         }
 
-        ast_star_button.setOnClickListener{
-            LayoutUtils.goToMenuActivity(applicationContext)
+        ast_end_button.setOnClickListener {
+            LayoutUtils.goBack(this)
         }
     }
 

@@ -38,8 +38,8 @@ class SettingActivitiy : AppCompatActivity() {
             startActivity(intent)
         }
 
-        as_star_button.setOnClickListener {
-            LayoutUtils.goToMenuActivity(applicationContext)
+        as_end_button.setOnClickListener {
+            LayoutUtils.goBack(this)
         }
     }
 }
