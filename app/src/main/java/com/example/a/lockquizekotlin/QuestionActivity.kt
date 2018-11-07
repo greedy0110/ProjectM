@@ -97,6 +97,10 @@ class QuestionActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "오답노트에서 제거 했어요", Toast.LENGTH_SHORT).show()
                 updateStar()
             }
+            else { // 오답트에 없는 내용이면 오답노트에 적고 빨간색으로 바꿀꺼!
+                checkIncorrect(questionList[currentQuestionIndex])
+                updateStar()
+            }
         }
     }
 
@@ -171,10 +175,8 @@ class QuestionActivity : AppCompatActivity() {
 
     private fun wrongAnswer() {
         Toast.makeText(applicationContext, "오답입니다.", Toast.LENGTH_SHORT).show()
-        checkIncorrect(questionList[currentQuestionIndex])
 //        val prevBackground = activity_question_layout.background
         activity_question_layout.setBackgroundResource(R.drawable.w_back)
-        updateStar()
         shakeQuestion()
         AndroidComponentUtils.postDelayedLaunch({
 //            activity_question_layout.background = prevBackground
@@ -196,7 +198,7 @@ class QuestionActivity : AppCompatActivity() {
         if (!hasQuestionInIncorrectEntryTable(entry.id)) {
             if (insertQuestionIntoIncorrectEntryTable(entry.id)){
                 incorrectList.add(entry)
-                Toast.makeText(applicationContext, "오답노트에 체크하였습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "오답노트에 체크했어요", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -223,7 +225,7 @@ class QuestionActivity : AppCompatActivity() {
 
     private fun goNextQuestion(): Boolean {
         if (currentQuestionIndex == -1 || currentQuestionIndex >= questionList.size - 1) {
-            Toast.makeText(applicationContext, "마지막 문제입니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "마지막 문제입니다", Toast.LENGTH_SHORT).show()
             return false
         }
         setQuestionUIByIndex(++currentQuestionIndex)
@@ -232,7 +234,7 @@ class QuestionActivity : AppCompatActivity() {
 
     private fun goPrevQuestion(): Boolean {
         if (currentQuestionIndex == -1 || currentQuestionIndex <= 0) {
-            Toast.makeText(applicationContext, "마지막 문제입니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "마지막 문제입니다", Toast.LENGTH_SHORT).show()
             return false
         }
         setQuestionUIByIndex(--currentQuestionIndex)
