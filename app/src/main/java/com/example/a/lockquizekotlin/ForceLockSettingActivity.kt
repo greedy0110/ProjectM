@@ -56,7 +56,7 @@ class ForceLockSettingActivity : AppCompatActivity() {
                     mSlideForcePeriod = time
                     SettingsContract.setSettingsEntry(applicationContext, entry)
                     if (entry.slideOnOff == "o") {
-                        AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext, entry.slideForcePeriod)
+                        AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
                     }
                     updateUI()
                 })

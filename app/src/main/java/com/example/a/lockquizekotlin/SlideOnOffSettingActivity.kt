@@ -27,7 +27,7 @@ class SlideOnOffSettingActivity : AppCompatActivity() {
             entry.slideOnOff = "o"
             SettingsContract.setSettingsEntry(applicationContext, entry)
             // 설정을 적용하려면 lock service 를 다시 켜줘야한다.
-            AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext, entry.slideForcePeriod)
+            AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
             updateUI(true)
         }
 

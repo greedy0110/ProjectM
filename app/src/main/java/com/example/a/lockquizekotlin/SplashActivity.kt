@@ -47,11 +47,11 @@ class SplashActivity : AppCompatActivity() {
                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
                 startActivityForResult(intent, 1234)
             } else {
-                AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext, forceLockPeriod)
+                AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
             }
         }
         else {
-            AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext, forceLockPeriod)
+            AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
         }
     }
 
@@ -60,7 +60,7 @@ class SplashActivity : AppCompatActivity() {
         when(requestCode) {
             1234 -> {
                 if (resultCode == Activity.RESULT_OK)
-                    AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext, forceLockPeriod)
+                    AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
                 else
                     startUnlockCaptureService()
             }

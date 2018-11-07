@@ -20,6 +20,7 @@ import com.example.a.lockquizekotlin.DBContract.QuestionContract
 import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import com.example.a.lockquizekotlin.R
 import com.example.a.lockquizekotlin.R.id.*
+import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import com.example.a.lockquizekotlin.Utils.MathUtils
 import com.example.a.lockquizekotlin.Utils.ResourceUtils
@@ -52,7 +53,10 @@ class LockScreenService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand ${intent?.extras?.getInt("forceLockPeriod")}")
         val flp = intent?.extras?.getInt("forceLockPeriod")
-        flp?.let { forceLockPeriod = flp }
+        flp?.let {
+            forceLockPeriod = flp
+            Log.d(TAG, "$forceLockPeriod 밀리초로 강제 락 시간세팅")
+        }
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -154,28 +158,15 @@ class LockScreenService : Service() {
                         in yesButtonX-checkNear..yesButtonX+checkNear -> {
                             Log.d(TAG, "yes button drag click")
                             when(answer) {
-                                "o" -> {
-                                    unlockLookScreen()
-                                    Toast.makeText(applicationContext, "정답입니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                                }
-                                else -> {
-                                    Log.d(TAG, "오답입니다~ 못나가세요")
-                                    Toast.makeText(applicationContext, "오답입니다! 못나갑니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                                }
+                                "o" -> correctAnswer()
+                                else -> wrongAnswer()
                             }
                         }
                         in noButtonX-checkNear..noButtonX+checkNear -> {
                             Log.d(TAG, "no button drag click")
                             when(answer) {
-                                "x" -> {
-                                    unlockLookScreen()
-                                    Toast.makeText(applicationContext, "정답입니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                                }
-                                else -> {
-                                    Log.d(TAG, "오답이야 못나가!")
-                                    shakeQuestion()
-                                    Toast.makeText(applicationContext, "오답입니다! 못나갑니다!", Toast.LENGTH_SHORT).show() // TODO 이거 다른 식으로 변경해야함. 단순한 토스트 로 알림 구현
-                                }
+                                "x" -> correctAnswer()
+                                else -> wrongAnswer()
                             }
                         }
                     }
@@ -190,6 +181,33 @@ class LockScreenService : Service() {
             }
             return@setOnTouchListener true
         }
+    }
+
+    private fun wrongAnswer(){
+        Log.d(TAG, "오답이야 못나가!")
+        shakeQuestion()
+
+        // 강제 잠금 시간 만큼 버튼을 누를수가 없어야함 (빨간화면으로 보여주자)
+        val layout = mView?.findViewById<View>(R.id.lock_screen_layout)
+        val prevMoveableReach = moveableReach
+        moveableReach = 0F
+
+        if (layout != null) {
+            layout.setBackgroundResource(R.drawable.w_back)
+            shakeQuestion()
+            // 다른 버튼을 누를 수 없어야함, 강제 잠금 설정 시간 후 만큼 기다려야함
+            AndroidComponentUtils.postDelayedLaunch({
+                LayoutUtils.setTheme(applicationContext, layout)
+                // slide 버튼을 움직일수 있게 롤백시킴
+                moveableReach = prevMoveableReach
+            }, forceLockPeriod.toLong())
+            Log.d(TAG, "$forceLockPeriod 만큼 강제 잠금 화면 중")
+        }
+    }
+
+    private fun correctAnswer(){
+        unlockLookScreen()
+        Toast.makeText(applicationContext, "정답입니다!", Toast.LENGTH_SHORT).show()
     }
 
     private fun selectDisplayQuestion() {
