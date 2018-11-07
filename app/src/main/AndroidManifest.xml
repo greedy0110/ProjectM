@@ -8,6 +8,8 @@
     <!-- 부팅시 다시 켜주기 위해 필요 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- 전화 상태 확인해서 잠금화면 띄워주기용 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:allowBackup="true"
