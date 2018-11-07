@@ -22,7 +22,6 @@ class UnlockCaptureService : Service() {
     var mReceiver: UnlockReceiver? = null
 
     override fun onBind(intent: Intent): IBinder? {
-        TODO("Return the communication channel to the service.")
         return null
     }
 

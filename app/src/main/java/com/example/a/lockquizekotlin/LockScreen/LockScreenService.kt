@@ -28,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_question.*
 import kotlinx.android.synthetic.main.activity_select_theme.*
 import java.util.*
 
+// TODO  이 녀석이 오답노트 체크가능하도록 만들어야함
 class LockScreenService : Service() {
     val TAG: String = "LockScreenService"
     var mView: View? = null
@@ -45,8 +46,12 @@ class LockScreenService : Service() {
     private var checkNear: Float = 150F
     private var moveableReach: Float = 0F
 
+    private var mQuestionTextView: TextView? = null
+    private var mCategoryTextView: TextView? = null
+    private var mCountdownTextView: TextView? = null
+
+
     override fun onBind(intent: Intent): IBinder? {
-        TODO("Return the communication channel to the service.")
         return null
     }
 
@@ -67,6 +72,10 @@ class LockScreenService : Service() {
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mView = inflater.inflate(R.layout.lock_screen, null)
+
+        mQuestionTextView = mView?.findViewById(R.id.qquestion_textview)
+        mCategoryTextView = mView?.findViewById(R.id.qcategory_textview)
+        mCountdownTextView = mView?.findViewById(R.id.countdown_textview)
 
         val layout = mView?.findViewById(R.id.lock_screen_layout) as View
         LayoutUtils.setTheme(applicationContext, layout)
@@ -108,8 +117,8 @@ class LockScreenService : Service() {
     private fun shakeQuestion(){
         val shake = AnimationUtils.loadAnimation(applicationContext, R.anim.shake)
 
-        mView?.findViewById<View>(R.id.qquestion_textview)?.startAnimation(shake)
-        mView?.findViewById<View>(R.id.qcategory_textview)?.startAnimation(shake)
+        mQuestionTextView?.startAnimation(shake)
+        mCategoryTextView?.startAnimation(shake)
     }
 
     private fun initDraggableButton() {
@@ -196,12 +205,24 @@ class LockScreenService : Service() {
             layout.setBackgroundResource(R.drawable.w_back)
             shakeQuestion()
             // 다른 버튼을 누를 수 없어야함, 강제 잠금 설정 시간 후 만큼 기다려야함
+            val countDownTerm = 1000L
+            countdown(forceLockPeriod.toLong(), countDownTerm)
             AndroidComponentUtils.postDelayedLaunch({
                 LayoutUtils.setTheme(applicationContext, layout)
                 // slide 버튼을 움직일수 있게 롤백시킴
                 moveableReach = prevMoveableReach
             }, forceLockPeriod.toLong())
             Log.d(TAG, "$forceLockPeriod 만큼 강제 잠금 화면 중")
+        }
+    }
+
+    private fun countdown(time: Long, term: Long) {
+        Log.d(TAG, "$time 밀리초 남음!")
+        if (time - term < 0) {
+            mCountdownTextView?.text = ""
+        } else {
+            mCountdownTextView?.text = (time/1000).toString()
+            AndroidComponentUtils.postDelayedLaunch({ countdown(time - term, term) }, term)
         }
     }
 
@@ -252,10 +273,8 @@ class LockScreenService : Service() {
         val item = items[randomQuestion]
 
         Log.d(TAG, "정보 읽어옴 선택된 정보 : {$item}")
-        val category = mView?.findViewById(R.id.qcategory_textview) as TextView
-        val question = mView?.findViewById(R.id.qquestion_textview) as TextView
-        category.text = item.category
-        question.text = item.question + " (${item.year})"
+        mCategoryTextView?.text = item.category
+        mQuestionTextView?.text = item.question + " (${item.year})"
         answer = item.answer
     }
 }

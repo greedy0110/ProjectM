@@ -175,11 +175,9 @@ class QuestionActivity : AppCompatActivity() {
 
     private fun wrongAnswer() {
         Toast.makeText(applicationContext, "오답입니다.", Toast.LENGTH_SHORT).show()
-//        val prevBackground = activity_question_layout.background
         activity_question_layout.setBackgroundResource(R.drawable.w_back)
         shakeQuestion()
         AndroidComponentUtils.postDelayedLaunch({
-//            activity_question_layout.background = prevBackground
             LayoutUtils.setTheme(applicationContext, activity_question_layout)
         }, 1000)
     }

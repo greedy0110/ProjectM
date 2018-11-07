@@ -5,6 +5,10 @@
     <!-- LockScreen을 띄우기 위함 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- 부팅시 다시 켜주기 위해 필요 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -13,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_main_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <service
             android:name=".LockScreen.LockScreenService"
             android:enabled="true"
@@ -47,7 +50,16 @@
         <activity android:name=".SelectThemeActivity" />
         <activity android:name=".SlideSettingsActivity" />
         <activity android:name=".SlideOnOffSettingActivity" />
-        <activity android:name=".ForceLockSettingActivity"></activity>
+        <activity android:name=".ForceLockSettingActivity" />
+
+        <receiver
+            android:name=".LockScreen.BootReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
