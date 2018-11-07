@@ -10,19 +10,22 @@ import java.io.IOException
 
 object DbUtils {
     const val TAG = "DbUtils"
+    // DATABASE__NAME 에는 카테고리와 문제 정보가 들어가서 항상 새로 불러오게 만들고
     const val DATABASE_NAME = "projectm.db"
+    // USER_DATABASE_NAME 에는 설정과 오답노트 정보가 들어와서 고정된 파일이 아님
+    const val USER_DATABASE_NAME = "projectmud.db"
     const val PACKAGE_DIR = "/data/data/com.example.a.lockquizekotlin/databases"
 
-    fun saveDbAssetToDevice(ctx: Context, force: Boolean = false){
+    // 이건 기존의 데이터만 사용할 거니까, projectmu는 의미가 없다.
+    fun saveDbAssetToDevice(ctx: Context, databaseName: String = DATABASE_NAME){
         val folder = File(PACKAGE_DIR)
         folder.mkdirs()
 
-        val outfile = File("$PACKAGE_DIR/$DATABASE_NAME")
+        val outfile = File("$PACKAGE_DIR/$databaseName")
 
-        if (force || outfile.length() <= 0) {
             val assetManager = ctx.getResources().getAssets()
             try {
-                val `is` = assetManager.open("db/$DATABASE_NAME", AssetManager.ACCESS_BUFFER)
+                val `is` = assetManager.open("db/$databaseName", AssetManager.ACCESS_BUFFER)
                 Log.d(TAG, "!! ${`is`.available()}")
                 val filesize = `is`.available()
                 val tempdata = ByteArray(filesize.toInt())
@@ -36,6 +39,5 @@ object DbUtils {
                 Log.d(TAG, "assetManager Error")
                 e.printStackTrace()
             }
-        }
     }
 }

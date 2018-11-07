@@ -7,6 +7,8 @@ import android.provider.BaseColumns
 import com.example.a.lockquizekotlin.Utils.DbUtils
 
 object CategoryContract{
+    val DATABASE_NAME = "questionDB"
+
     object Schema : BaseColumns {
         const val TABLE_NAME = "category_entry"
         const val COLUMN_ID = "id"
@@ -23,7 +25,7 @@ object CategoryContract{
 
     class DbHelper(context: Context) : SQLiteOpenHelper(context, "${DbUtils.PACKAGE_DIR}/${DbUtils.DATABASE_NAME}", null, DATABASE_VERSION) {
         init {
-            DbUtils.saveDbAssetToDevice(context)
+            DbUtils.saveDbAssetToDevice(context, databaseName = DATABASE_NAME)
         }
 
         override fun onCreate(db: SQLiteDatabase?) {

@@ -1,6 +1,7 @@
 package com.example.a.lockquizekotlin
 
 import android.content.ContentValues
+import android.database.sqlite.SQLiteOpenHelper
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,7 +21,8 @@ import java.util.*
 
 class QuestionActivity : AppCompatActivity() {
     val TAG = "QuestionActivity"
-    private var questionDbHelper: QuestionContract.DbHelper? = null
+    private var questionDbHelper: SQLiteOpenHelper? = null
+    private var userDbHelper: SQLiteOpenHelper? = null
     private var answer: String = ""
     private var justCategory = false
     private var selectedCategoryId = -1
@@ -283,12 +285,13 @@ class QuestionActivity : AppCompatActivity() {
             }
         }
 
+        qdb?.close()
         return questionList
     }
 
     private fun getQuestionsByExistInIncorrectEntryTable(category_name: String): MutableList<QuestionContract.Entry> {
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
+        userDbHelper = IncorrectContract.DbHelper(applicationContext)
+        val qdb = userDbHelper?.readableDatabase
 
         val projection = arrayOf(IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID)
 
@@ -315,6 +318,7 @@ class QuestionActivity : AppCompatActivity() {
             }
         }
 
+        qdb?.close()
         return questionList
     }
 
@@ -345,6 +349,7 @@ class QuestionActivity : AppCompatActivity() {
             }
         }
 
+        qdb?.close()
         return name
     }
 
@@ -382,12 +387,13 @@ class QuestionActivity : AppCompatActivity() {
             }
         }
 
+        qdb?.close()
         return entry
     }
 
     private fun hasQuestionInIncorrectEntryTable(question_id: Int): Boolean{
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
+        userDbHelper = IncorrectContract.DbHelper(applicationContext)
+        val qdb = userDbHelper?.readableDatabase
 
         val projection = arrayOf(IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID)
         val selectionString = "${IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID} = ?"
@@ -403,17 +409,20 @@ class QuestionActivity : AppCompatActivity() {
                 null
         )
 
+        qdb?.close()
         return cursor?.count != 0
     }
 
     private fun insertQuestionIntoIncorrectEntryTable(question_id: Int): Boolean{
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
+        userDbHelper = IncorrectContract.DbHelper(applicationContext)
+        val qdb = userDbHelper?.readableDatabase
 
         val newRowId = qdb?.insert(IncorrectContract.Schema.TABLE_NAME, null, ContentValues().apply {
             put(IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID, question_id)
         })
 
+
+        qdb?.close()
         if (newRowId == -1L) {
             Toast.makeText(applicationContext, "insert problem", Toast.LENGTH_SHORT).show()
             Log.d(TAG, "insert 에러")
@@ -423,10 +432,11 @@ class QuestionActivity : AppCompatActivity() {
     }
 
     private fun deleteQuestionOnIncorrectEntryTable(question_id: Int) {
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
+        userDbHelper = IncorrectContract.DbHelper(applicationContext)
+        val qdb = userDbHelper?.readableDatabase
 
         qdb?.delete(IncorrectContract.Schema.TABLE_NAME, "${IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID} = ?",
                 arrayOf(question_id.toString()))
+        qdb?.close()
     }
 }

@@ -34,8 +34,6 @@ class SplashActivity : AppCompatActivity() {
             this@SplashActivity.finish()
 
         }, delayTime)
-//        //이거 꼭 없애야한다! 이거 있으면 오답노트 내용 다 날라갈 것 (테스트 끝나면 바로 제거해야함!!)
-//        DbUtils.saveDbAssetToDevice(applicationContext, true) // 초기 DB 파일 다시 쓰기
 
         // 초기 세팅에 슬라이드 설정을 보고 켜준다.
         val entry = SettingsContract.getSettingsEntry(applicationContext)

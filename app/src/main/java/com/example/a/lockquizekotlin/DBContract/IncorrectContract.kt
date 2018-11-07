@@ -4,10 +4,14 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import android.util.Log
 import com.example.a.lockquizekotlin.Utils.DbUtils
 
 
+
 object IncorrectContract {
+    val DATABASE_NAME = "incorrectDB"
+
     object Schema : BaseColumns {
         const val TABLE_NAME = "incorrect_entry"
         const val COLUMN_ID = "id"
@@ -25,17 +29,14 @@ object IncorrectContract {
 
     data class EntryEasy(val id: Int, val question: String)
 
-    class DbHelper(context: Context) : SQLiteOpenHelper(context, "${DbUtils.PACKAGE_DIR}/${DbUtils.DATABASE_NAME}", null, DATABASE_VERSION) {
-        init {
-            DbUtils.saveDbAssetToDevice(context)
-        }
-
+    class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
         override fun onCreate(db: SQLiteDatabase?) {
             try {
-                db?.execSQL(CategoryContract.Schema.SQL_CREATE_ENTRIES)
+                Log.e("IncorrectContract", "db create")
+                db?.execSQL(Schema.SQL_CREATE_ENTRIES)
             }
             catch (e: Exception) {
-
+                Log.e("IncorrectContract", e.toString())
             }
         }
 
@@ -45,9 +46,7 @@ object IncorrectContract {
         }
 
         companion object {
-            // 이게 되네
             const val DATABASE_VERSION = 1
-            const val DATABASE_NAME = DbUtils.DATABASE_NAME
         }
     }
 }

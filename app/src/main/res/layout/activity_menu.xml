@@ -42,6 +42,14 @@
             android:text="@string/ox_quize"
             android:textColor="@android:color/background_light" />
 
+        <ImageView
+            android:id="@+id/border2"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.00001"
+            app:srcCompat="@android:color/darker_gray" />
+
         <Button
             android:id="@+id/wrong_answer_button"
             android:layout_width="match_parent"
@@ -49,6 +57,14 @@
             android:layout_weight="1"
             android:text="@string/wrong_answer"
             android:textColor="@android:color/background_light" />
+
+        <ImageView
+            android:id="@+id/border3"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.00001"
+            app:srcCompat="@android:color/darker_gray" />
 
         <Button
             android:id="@+id/setting_button"

@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.a.lockquizekotlin.Utils.DbUtils
 
 object SettingsContract{
+    val DATABASE_NAME = "settingDB"
     val THEME_LIST = listOf<String>("db", "dg", "dgr", "dp", "lg", "lp", "ls", "ly")
 
     object Schema : BaseColumns {
@@ -31,17 +32,14 @@ object SettingsContract{
     data class Entry(var id: Int = Schema.DEFAULT_THEME_ID, var theme: String = Schema.DEFAULT_THEME,
                      var slideOnOff:String = Schema.DEFAULT_SLIDE_ONOFF, var slideForcePeriod: Int = Schema.DEFAULT_SLIDE_FORCE_PERIOD)
 
-    class DbHelper(context: Context) : SQLiteOpenHelper(context, "${DbUtils.PACKAGE_DIR}/${DbUtils.DATABASE_NAME}", null, DATABASE_VERSION) {
-        init {
-            DbUtils.saveDbAssetToDevice(context)
-        }
-
+    class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
         override fun onCreate(db: SQLiteDatabase?) {
             try {
+                Log.e("SettingsContract", "db create")
                 db?.execSQL(Schema.SQL_CREATE_ENTRIES)
             }
             catch (e: Exception) {
-
+                Log.e("SettingsContract", e.toString())
             }
         }
 
@@ -53,7 +51,7 @@ object SettingsContract{
         companion object {
             // 이게 되네
             const val DATABASE_VERSION = 1
-            const val DATABASE_NAME = DbUtils.DATABASE_NAME
+            const val DATABASE_NAME = DbUtils.USER_DATABASE_NAME
         }
     }
 

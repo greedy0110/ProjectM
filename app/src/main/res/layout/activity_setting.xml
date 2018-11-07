@@ -51,6 +51,14 @@
             android:text="@string/lock_slide_set"
             android:textColor="@android:color/background_light" />
 
+        <ImageView
+            android:id="@+id/border4"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.0001"
+            app:srcCompat="@android:color/darker_gray" />
+
         <Button
             android:id="@+id/skin_setting_button"
             android:layout_width="match_parent"

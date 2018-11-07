@@ -1,10 +1,12 @@
 package com.example.a.lockquizekotlin
 
 import android.content.Intent
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import com.example.a.lockquizekotlin.DBContract.CategoryContract
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
@@ -32,6 +34,12 @@ class CategoryListActivity : AppCompatActivity() {
             button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             button.background.alpha = 0
             category_list.addView(button)
+
+            val factor = applicationContext.resources.displayMetrics.density
+            val border = ImageView(applicationContext)
+            border.setBackgroundColor(Color.GRAY)
+            border.layoutParams = LinearLayout.LayoutParams((100 * factor).toInt(), LinearLayout.LayoutParams.WRAP_CONTENT, 0.02f)
+            category_list.addView(border)
 
             button.setOnClickListener {
                 if (isOx) { // 오답 노트용 QuestionActivity를 만들어야 한다.
