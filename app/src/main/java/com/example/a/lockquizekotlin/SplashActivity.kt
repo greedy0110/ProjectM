@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import android.widget.Toast
 import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import com.example.a.lockquizekotlin.LockScreen.UnlockCaptureService
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_splash.*
 class SplashActivity : AppCompatActivity() {
 
     private var forceLockPeriod = SettingsContract.Schema.DEFAULT_SLIDE_FORCE_PERIOD
+    private val delayTime = 1000L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,19 +29,15 @@ class SplashActivity : AppCompatActivity() {
         LayoutUtils.setTheme(applicationContext, splash_activity_layout)
 
         // delayTime / 1000 초의 지연시간후에 menuActivity를 켜주자.
-        val delayTime = 1000L
-        Handler().postDelayed({
-            val menuIntent = Intent(this@SplashActivity, MenuActivity::class.java)
-            this@SplashActivity.startActivity(menuIntent)
-            this@SplashActivity.finish()
-
-        }, delayTime)
 
         // 초기 세팅에 슬라이드 설정을 보고 켜준다.
         val entry = SettingsContract.getSettingsEntry(applicationContext)
         if (entry.slideOnOff == "o") {
             forceLockPeriod = entry.slideForcePeriod
             startUnlockCaptureService()
+        }
+        else {
+            goToMenu()
         }
     }
 
@@ -50,10 +48,12 @@ class SplashActivity : AppCompatActivity() {
                 startActivityForResult(intent, 1234)
             } else {
                 AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
+                goToMenu()
             }
         }
         else {
             AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
+            goToMenu()
         }
     }
 
@@ -61,11 +61,27 @@ class SplashActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode) {
             1234 -> {
-                if (resultCode == Activity.RESULT_OK)
-                    AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
-                else
-                    startUnlockCaptureService()
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (Settings.canDrawOverlays(applicationContext)) {
+                        AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
+                        goToMenu()
+                    } else {
+                        Toast.makeText(applicationContext, "권한 설정을 해야함", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+                else {
+                    goToMenu()
+                }
             }
         }
+    }
+
+    private fun goToMenu(){
+        Handler().postDelayed({
+            val menuIntent = Intent(this@SplashActivity, MenuActivity::class.java)
+            startActivity(menuIntent)
+            finish()
+        }, delayTime)
     }
 }
