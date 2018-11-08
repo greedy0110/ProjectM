@@ -409,8 +409,10 @@ class QuestionActivity : AppCompatActivity() {
                 null
         )
 
+        val has = cursor?.count != 0
+
         qdb?.close()
-        return cursor?.count != 0
+        return has
     }
 
     private fun insertQuestionIntoIncorrectEntryTable(question_id: Int): Boolean{

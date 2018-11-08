@@ -2,6 +2,7 @@ package com.example.a.lockquizekotlin
 
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.widget.LinearLayout
 import com.example.a.lockquizekotlin.DBContract.CategoryContract
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import kotlinx.android.synthetic.main.activity_categorylist.*
+import kotlinx.android.synthetic.main.activity_categorylist.view.*
 import kotlinx.android.synthetic.main.activity_menu.*
 
 class CategoryListActivity : AppCompatActivity() {
@@ -33,6 +35,8 @@ class CategoryListActivity : AppCompatActivity() {
             button.id = entry.id
             button.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
             button.background.alpha = 0
+            if (Build.VERSION.SDK_INT >= 23)
+                button.setTextAppearance(R.style.ButtonStyle)
             category_list.addView(button)
 
             val factor = applicationContext.resources.displayMetrics.density
