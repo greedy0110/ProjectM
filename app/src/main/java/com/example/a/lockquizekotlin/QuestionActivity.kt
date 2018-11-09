@@ -9,9 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import com.example.a.lockquizekotlin.DBContract.CategoryContract
-import com.example.a.lockquizekotlin.DBContract.IncorrectContract
-import com.example.a.lockquizekotlin.DBContract.QuestionContract
+import com.example.a.lockquizekotlin.DBContract.*
 import com.example.a.lockquizekotlin.R.id.*
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
@@ -26,8 +24,8 @@ class QuestionActivity : AppCompatActivity() {
     private var answer: String = ""
     private var justCategory = false
     private var selectedCategoryId = -1
-    private var questionList = listOf<QuestionContract.Entry>()
-    private var incorrectList = mutableListOf<QuestionContract.Entry>()
+    private var questionList = listOf<QuestionEntry>()
+    private var incorrectList = mutableListOf<QuestionEntry>()
     private var currentQuestionIndex = -1
     private var dx: Float = 0F
     private var dy: Float = 0F
@@ -49,7 +47,7 @@ class QuestionActivity : AppCompatActivity() {
             selectedCategoryId = intent.extras.getInt("category_id")
             questionList = getQuestionsByCategoryId(selectedCategoryId)
             Collections.shuffle(questionList)
-            incorrectList = getQuestionsByExistInIncorrectEntryTable(getCategoryNameById(selectedCategoryId))
+            incorrectList = getQuestionsByExistInIncorrectEntryTable(selectedCategoryId)
             if (questionList.isEmpty()) {
                 Toast.makeText(applicationContext, "지정된 카테고리에 문제가 없습니다.", Toast.LENGTH_SHORT).show()
                 finish()
@@ -58,7 +56,7 @@ class QuestionActivity : AppCompatActivity() {
         }
         else { // 오답 노트 용
             selectedCategoryId = intent.extras.getInt("category_id") // 오답노트도 법 별로임!
-            questionList = getQuestionsByExistInIncorrectEntryTable(getCategoryNameById(selectedCategoryId)) // 오답노트 테이블에 있는 녀석만 가져옴
+            questionList = getQuestionsByExistInIncorrectEntryTable(selectedCategoryId) // 오답노트 테이블에 있는 녀석만 가져옴
             Collections.shuffle(questionList)
             incorrectList = questionList.toMutableList()
             if (questionList.isEmpty()) {
@@ -94,7 +92,7 @@ class QuestionActivity : AppCompatActivity() {
 
         qa_star_button.setOnClickListener {
             if (incorrectList.contains(questionList[currentQuestionIndex])){ // 오답노트에 있는 내용이면 오답노트에서 제거하고 노란색으로 다시 바꾸자!
-                deleteQuestionOnIncorrectEntryTable(questionList[currentQuestionIndex].id)
+                IncorrectDB.deleteOneByQuestionId(applicationContext, questionList[currentQuestionIndex].id)
                 incorrectList.remove(questionList[currentQuestionIndex])
                 Toast.makeText(applicationContext, "오답노트에서 제거 했어요", Toast.LENGTH_SHORT).show()
                 updateStar()
@@ -193,10 +191,10 @@ class QuestionActivity : AppCompatActivity() {
         }, 1000)
     }
 
-    private fun checkIncorrect(entry: QuestionContract.Entry) {
+    private fun checkIncorrect(entry: QuestionEntry) {
         // incorrect_table 에 적용이 안된 녀석이면, 써준다.
-        if (!hasQuestionInIncorrectEntryTable(entry.id)) {
-            if (insertQuestionIntoIncorrectEntryTable(entry.id)){
+        if (!IncorrectDB.searchOneByQuestionId(applicationContext, entry.id)) {
+            if (IncorrectDB.writeOne(applicationContext, IncorrectEntry(0, entry.id))){
                 incorrectList.add(entry)
                 Toast.makeText(applicationContext, "오답노트에 체크했어요", Toast.LENGTH_SHORT).show()
             }
@@ -249,196 +247,38 @@ class QuestionActivity : AppCompatActivity() {
     }
 
     // category_id에 해당하는 문제 목록을 반환하자
-    private fun getQuestionsByCategoryId(category_id: Int): MutableList<QuestionContract.Entry> {
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
+    private fun getQuestionsByCategoryId(category_id: Int): List<QuestionEntry> {
+        val questions = QuestionDB.readAll(applicationContext)
+        val categoryName = CategoryDB.readOne(applicationContext, category_id)
 
-        val categoryName = getCategoryNameById(category_id)
-        // 데이터베이스 컬럼 중에서 알아낼 prjection을 정의한다.
-        val projection = arrayOf(QuestionContract.Schema.COLUMN_ID, QuestionContract.Schema.COLUMN_NAME_YEAR,
-                QuestionContract.Schema.COLUMN_NAME_QUESTION, QuestionContract.Schema.COLUMN_NAME_ANSWER)
-        val selectionString = "${QuestionContract.Schema.COLUMN_NAME_CATEGORY} = ?"
-        val selectionArgs = arrayOf<String>(categoryName)
-
-        val cursor = qdb?.query(
-                QuestionContract.Schema.TABLE_NAME,
-                projection,
-                selectionString,
-                selectionArgs,
-                null,
-                null,
-                null
-        )
-
-        val questionList = mutableListOf<QuestionContract.Entry>()
-        cursor?.let {
-            with(cursor) {
-                while (moveToNext()) {
-                    val id = getInt(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_ID))
-                    val year = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_YEAR))
-                    val question = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_QUESTION))
-                    val answer = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_ANSWER))
-                    val entry = QuestionContract.Entry(id, year, categoryName, question, answer)
-                    Log.d(TAG, "question entry : ${entry.toString()}")
-                    questionList.add(entry)
+        if (categoryName != null) {
+            val result = mutableListOf<QuestionEntry>()
+            for (q in questions) {
+                if (q.category == categoryName.category) {
+                    result.add(q)
                 }
             }
+            return result.toList()
         }
-
-        qdb?.close()
-        return questionList
+        else {
+            return listOf()
+        }
     }
 
-    private fun getQuestionsByExistInIncorrectEntryTable(category_name: String): MutableList<QuestionContract.Entry> {
-        userDbHelper = IncorrectContract.DbHelper(applicationContext)
-        val qdb = userDbHelper?.readableDatabase
+    private fun getQuestionsByExistInIncorrectEntryTable(category_id: Int): MutableList<QuestionEntry> {
+        val incorrects = IncorrectDB.readAll(applicationContext)
+        val questions = QuestionDB.readAll(applicationContext)
+        val category_name =CategoryDB.readOne(applicationContext, category_id)?.category
+        if (category_name == null) return mutableListOf()
 
-        val projection = arrayOf(IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID)
-
-        val cursor = qdb?.query(
-                IncorrectContract.Schema.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        )
-
-        val questionList = mutableListOf<QuestionContract.Entry>()
-        cursor?.let {
-            with(cursor) {
-                while (moveToNext()) {
-                    val question_id = getInt(getColumnIndexOrThrow(IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID))
-                    val question_entry = getQuestionEntryEasyById(question_id)
-                    Log.d(TAG, "question by exist in incorrect entry table $question_entry")
-                    if (question_entry.category == category_name)
-                        questionList.add(getQuestionEntryEasyById(question_id))
-                }
+        val result = mutableListOf<QuestionEntry>()
+        for (inc in incorrects) {
+            val q = questions.find {
+                (inc.question_id == it.id) && (it.category == category_name)
             }
+            if (q == null) continue
+            result.add(q)
         }
-
-        qdb?.close()
-        return questionList
-    }
-
-    private fun getCategoryNameById(id: Int): String{
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
-
-        val categoryProjection = arrayOf(CategoryContract.Schema.COLUMN_NAME)
-        val categorySelectionString = "${CategoryContract.Schema.COLUMN_ID} = ?"
-        val categorySelectionArgs = arrayOf<String>(id.toString())
-
-        val categoryCursor = qdb?.query(
-                CategoryContract.Schema.TABLE_NAME,
-                categoryProjection,
-                categorySelectionString,
-                categorySelectionArgs,
-                null,
-                null,
-                null
-        )
-
-        var name = ""
-        categoryCursor?.let {
-            with(categoryCursor) {
-                while (moveToNext()) {
-                    name = getString(getColumnIndexOrThrow(CategoryContract.Schema.COLUMN_NAME))
-                }
-            }
-        }
-
-        qdb?.close()
-        return name
-    }
-
-    private fun getQuestionEntryEasyById(id: Int): QuestionContract.Entry {
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
-
-        val projection = arrayOf(QuestionContract.Schema.COLUMN_ID, QuestionContract.Schema.COLUMN_NAME_YEAR ,QuestionContract.Schema.COLUMN_NAME_CATEGORY,
-                QuestionContract.Schema.COLUMN_NAME_QUESTION, QuestionContract.Schema.COLUMN_NAME_ANSWER)
-        val selectionString = "${QuestionContract.Schema.COLUMN_ID} = ?"
-        val selectionArgs = arrayOf<String>(id.toString())
-
-        val cursor = qdb?.query(
-                QuestionContract.Schema.TABLE_NAME,
-                projection,
-                selectionString,
-                selectionArgs,
-                null,
-                null,
-                null
-        )
-
-        var entry = QuestionContract.Entry(0,"year", "category", "question", "o")
-        cursor?.let {
-            with(cursor) {
-                while (moveToNext()) {
-                    val id = getInt(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_ID))
-                    val year = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_YEAR))
-                    val categoryName = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_CATEGORY))
-                    val question = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_QUESTION))
-                    val answer = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_ANSWER))
-                    entry = QuestionContract.Entry(id, year, categoryName, question, answer)
-                    Log.d(TAG, "incorrect question entry : ${entry.toString()}")
-                }
-            }
-        }
-
-        qdb?.close()
-        return entry
-    }
-
-    private fun hasQuestionInIncorrectEntryTable(question_id: Int): Boolean{
-        userDbHelper = IncorrectContract.DbHelper(applicationContext)
-        val qdb = userDbHelper?.readableDatabase
-
-        val projection = arrayOf(IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID)
-        val selectionString = "${IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID} = ?"
-        val selectionArgs = arrayOf<String>(question_id.toString())
-
-        val cursor = qdb?.query(
-                IncorrectContract.Schema.TABLE_NAME,
-                projection,
-                selectionString,
-                selectionArgs,
-                null,
-                null,
-                null
-        )
-
-        val has = cursor?.count != 0
-
-        qdb?.close()
-        return has
-    }
-
-    private fun insertQuestionIntoIncorrectEntryTable(question_id: Int): Boolean{
-        userDbHelper = IncorrectContract.DbHelper(applicationContext)
-        val qdb = userDbHelper?.readableDatabase
-
-        val newRowId = qdb?.insert(IncorrectContract.Schema.TABLE_NAME, null, ContentValues().apply {
-            put(IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID, question_id)
-        })
-
-
-        qdb?.close()
-        if (newRowId == -1L) {
-            Toast.makeText(applicationContext, "insert problem", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "insert 에러")
-            return false
-        }
-        return true
-    }
-
-    private fun deleteQuestionOnIncorrectEntryTable(question_id: Int) {
-        userDbHelper = IncorrectContract.DbHelper(applicationContext)
-        val qdb = userDbHelper?.readableDatabase
-
-        qdb?.delete(IncorrectContract.Schema.TABLE_NAME, "${IncorrectContract.Schema.COLUMN_NAME_QUESTION_ID} = ?",
-                arrayOf(question_id.toString()))
-        qdb?.close()
+        return result
     }
 }

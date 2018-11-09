@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -17,25 +16,20 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.example.a.lockquizekotlin.DBContract.QuestionContract
+import com.example.a.lockquizekotlin.DBContract.QuestionDB
 import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import com.example.a.lockquizekotlin.R
-import com.example.a.lockquizekotlin.R.id.*
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import com.example.a.lockquizekotlin.Utils.MathUtils
 import com.example.a.lockquizekotlin.Utils.ResourceUtils
-import kotlinx.android.synthetic.main.activity_question.*
-import kotlinx.android.synthetic.main.activity_select_theme.*
 import java.util.*
-import java.util.concurrent.locks.Lock
 
 // TODO  이 녀석이 오답노트 체크가능하도록 만들어야함
 class LockScreenService : Service() {
     val TAG: String = "LockScreenService"
     var mView: View? = null
     var mWindowManager: WindowManager? = null
-    private var questionDbHelper: QuestionContract.DbHelper? = null
     private var answer: String = ""
     // 문제 틀리고 해당 시간 아무것도 못하고 문제틀린것 확인가능 ㅎㅎ;
     private var forceLockPeriod = SettingsContract.Schema.DEFAULT_SLIDE_FORCE_PERIOD
@@ -110,8 +104,6 @@ class LockScreenService : Service() {
         Log.d(TAG, "onDestroy")
         mView?.let { mWindowManager?.removeView(mView) }
 
-        // dbHelper 자원을 없에자
-        questionDbHelper?.close()
         super.onDestroy()
     }
 
@@ -239,45 +231,10 @@ class LockScreenService : Service() {
     }
 
     private fun selectDisplayQuestion() {
-        questionDbHelper = QuestionContract.DbHelper(applicationContext)
-        val qdb = questionDbHelper?.readableDatabase
-        if (qdb == null) {
-            unlockLookScreen()
-            return
-        }
+        val questions = QuestionDB.readAll(applicationContext)
 
-        // 데이터베이스 컬럼 중에서 알아낼 prjection을 정의한다.
-        val projection = arrayOf(QuestionContract.Schema.COLUMN_ID, QuestionContract.Schema.COLUMN_NAME_YEAR,QuestionContract.Schema.COLUMN_NAME_CATEGORY,
-                QuestionContract.Schema.COLUMN_NAME_QUESTION, QuestionContract.Schema.COLUMN_NAME_ANSWER)
-
-        val cursor = qdb?.query(
-                QuestionContract.Schema.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null
-        )
-
-        val items = mutableListOf<QuestionContract.Entry>()
-        cursor?.let {
-            with(cursor) {
-                while (moveToNext()) {
-                    val id = getInt(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_ID))
-                    val year = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_YEAR))
-                    val category = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_CATEGORY))
-                    val question = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_QUESTION))
-                    val answer = getString(getColumnIndexOrThrow(QuestionContract.Schema.COLUMN_NAME_ANSWER))
-                    val entry = QuestionContract.Entry(id, year, category, question, answer)
-                    Log.d(TAG, "question entry : ${entry.toString()}")
-                    items.add(entry)
-                }
-            }
-        }
-
-        val randomQuestion= Random().nextInt(items.size)
-        val item = items[randomQuestion]
+        val randomQuestion= Random().nextInt(questions.size)
+        val item = questions[randomQuestion]
 
         Log.d(TAG, "정보 읽어옴 선택된 정보 : {$item}")
         mCategoryTextView?.text = item.category

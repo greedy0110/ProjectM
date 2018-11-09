@@ -12,8 +12,6 @@ object DbUtils {
     const val TAG = "DbUtils"
     // DATABASE__NAME 에는 카테고리와 문제 정보가 들어가서 항상 새로 불러오게 만들고
     const val DATABASE_NAME = "projectm.db"
-    // USER_DATABASE_NAME 에는 설정과 오답노트 정보가 들어와서 고정된 파일이 아님
-    const val USER_DATABASE_NAME = "projectmud.db"
     const val PACKAGE_DIR = "/data/data/com.example.a.lockquizekotlin/databases"
 
     // 이건 기존의 데이터만 사용할 거니까, projectmu는 의미가 없다.

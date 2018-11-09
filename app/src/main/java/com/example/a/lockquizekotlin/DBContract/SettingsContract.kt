@@ -10,7 +10,6 @@ import android.widget.Toast
 import com.example.a.lockquizekotlin.Utils.DbUtils
 
 object SettingsContract{
-    val DATABASE_NAME = "settingDB"
     val THEME_LIST = listOf<String>("db", "dg", "dgr", "dp", "lg", "lp", "ls", "ly")
 
     object Schema : BaseColumns {
@@ -49,9 +48,8 @@ object SettingsContract{
         }
 
         companion object {
-            // 이게 되네
             const val DATABASE_VERSION = 1
-            const val DATABASE_NAME = DbUtils.USER_DATABASE_NAME
+            const val DATABASE_NAME = "settings"
         }
     }
 
