@@ -98,7 +98,10 @@ class QuestionActivity : AppCompatActivity() {
                 updateStar()
             }
             else { // 오답트에 없는 내용이면 오답노트에 적고 빨간색으로 바꿀꺼!
-                checkIncorrect(questionList[currentQuestionIndex])
+                if (IncorrectDB.writeOne(applicationContext, IncorrectEntry(0, questionList[currentQuestionIndex].id))){
+                    incorrectList.add(questionList[currentQuestionIndex])
+                    Toast.makeText(applicationContext, "오답노트에 체크했어요", Toast.LENGTH_SHORT).show()
+                }
                 updateStar()
             }
         }
@@ -189,16 +192,6 @@ class QuestionActivity : AppCompatActivity() {
             qa_check_image.visibility = View.INVISIBLE
             goNextQuestion()
         }, 1000)
-    }
-
-    private fun checkIncorrect(entry: QuestionEntry) {
-        // incorrect_table 에 적용이 안된 녀석이면, 써준다.
-        if (!IncorrectDB.searchOneByQuestionId(applicationContext, entry.id)) {
-            if (IncorrectDB.writeOne(applicationContext, IncorrectEntry(0, entry.id))){
-                incorrectList.add(entry)
-                Toast.makeText(applicationContext, "오답노트에 체크했어요", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun setQuestionUIByIndex(index: Int) {

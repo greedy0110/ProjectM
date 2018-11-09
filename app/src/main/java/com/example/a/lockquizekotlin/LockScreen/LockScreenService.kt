@@ -16,13 +16,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.example.a.lockquizekotlin.DBContract.QuestionDB
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.DBContract.*
 import com.example.a.lockquizekotlin.R
+import com.example.a.lockquizekotlin.R.id.qa_star_button
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import com.example.a.lockquizekotlin.Utils.MathUtils
 import com.example.a.lockquizekotlin.Utils.ResourceUtils
+import kotlinx.android.synthetic.main.activity_question.*
 import java.util.*
 
 // TODO  이 녀석이 오답노트 체크가능하도록 만들어야함
@@ -44,6 +45,8 @@ class LockScreenService : Service() {
 
     private var mQuestionTextView: TextView? = null
     private var mCategoryTextView: TextView? = null
+    private var mStarButton: Button? = null
+    private var mSelectQuestion: QuestionEntry? = null
     private val mNumOfCountDot = 5
     private var mNextCloseDot = 5
     private var dotManager :LockDotManager? = null
@@ -73,6 +76,7 @@ class LockScreenService : Service() {
 
         mQuestionTextView = mView?.findViewById(R.id.qquestion_textview)
         mCategoryTextView = mView?.findViewById(R.id.qcategory_textview)
+        mStarButton = mView?.findViewById(R.id.ls_star_button)
         mView?.let {
             dotManager = LockDotManager(it, mNumOfCountDot)
         }
@@ -81,6 +85,18 @@ class LockScreenService : Service() {
 
         selectDisplayQuestion()
         initDraggableButton()
+        mStarButton?.setOnClickListener {
+            mSelectQuestion?.let {
+                if (IncorrectDB.searchOneByQuestionId(applicationContext, it.id)) {
+                    IncorrectDB.deleteOneByQuestionId(applicationContext, it.id)
+                    updateStar()
+                }
+                else {
+                    IncorrectDB.writeOne(applicationContext, IncorrectEntry(0, it.id))
+                    updateStar()
+                }
+            }
+        }
 
         val LAYOUT_FLAG = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY else
@@ -234,12 +250,26 @@ class LockScreenService : Service() {
         val questions = QuestionDB.readAll(applicationContext)
 
         val randomQuestion= Random().nextInt(questions.size)
-        val item = questions[randomQuestion]
+        mSelectQuestion = questions[randomQuestion]
 
-        Log.d(TAG, "정보 읽어옴 선택된 정보 : {$item}")
-        mCategoryTextView?.text = item.category
-        mQuestionTextView?.text = item.question + " (${item.year})"
-        answer = item.answer
+        mSelectQuestion?.let {
+            Log.d(TAG, "정보 읽어옴 선택된 정보 : ${mSelectQuestion}")
+            mCategoryTextView?.text = it.category
+            mQuestionTextView?.text = it.question + " (${it.year})"
+            answer = it.answer
+            updateStar()
+        }
+    }
+
+    private fun updateStar(){
+        mSelectQuestion?.let {
+            if (IncorrectDB.searchOneByQuestionId(applicationContext, it.id)) {
+                mStarButton?.setBackgroundResource(R.drawable.red_star)
+            }
+            else {
+                mStarButton?.setBackgroundResource(R.drawable.yellow_star)
+            }
+        }
     }
 }
 
