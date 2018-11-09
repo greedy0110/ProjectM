@@ -15,6 +15,7 @@ import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck
 import com.example.a.lockquizekotlin.Utils.DbUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
+import com.example.a.lockquizekotlin.Utils.ResourceUtils
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
@@ -27,6 +28,8 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         LayoutUtils.setTheme(applicationContext, splash_activity_layout)
+        val theme = SettingsContract.getCurrentTheme(applicationContext)
+        staryou_imageview.setImageResource(ResourceUtils.findDrawableByName(applicationContext, "${theme[0]}_staryou"))
 
         // delayTime / 1000 초의 지연시간후에 menuActivity를 켜주자.
 

@@ -8,33 +8,86 @@
     android:background="@drawable/db_back"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/countdown_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/lock_dot_layout"
+        android:layout_width="120dp"
+        android:layout_height="24dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="260dp"
         android:layout_marginEnd="8dp"
-        android:textSize="150sp"
+        android:layout_marginBottom="130dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/lock_dot1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:tag="lock_dot1"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/db_dot"
+            tools:layout_editor_absoluteX="40dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+        <ImageView
+            android:id="@+id/lock_dot2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:tag="lock_dot2"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/db_dot"
+            tools:layout_editor_absoluteX="76dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+        <ImageView
+            android:id="@+id/lock_dot3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:tag="lock_dot3"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/db_dot"
+            tools:layout_editor_absoluteX="116dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+        <ImageView
+            android:id="@+id/lock_dot4"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:tag="lock_dot4"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/db_dot"
+            tools:layout_editor_absoluteX="152dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+        <ImageView
+            android:id="@+id/lock_dot5"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:tag="lock_dot5"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/db_dot"
+            tools:layout_editor_absoluteX="196dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/drag_button_view"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/no_button"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/yes_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintEnd_toStartOf="@+id/no_button"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toEndOf="@+id/yes_button"
         app:srcCompat="@drawable/db_sbutton" />
 
     <Button
@@ -82,27 +135,23 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/db_sx"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.863"
-        app:layout_constraintStart_toEndOf="@+id/yes_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintStart_toEndOf="@+id/yes_button" />
 
     <Button
         android:id="@+id/yes_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/db_so"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.119"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.887" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

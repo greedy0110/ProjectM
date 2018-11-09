@@ -20,14 +20,16 @@
 
 
     <!-- Custom font style 일괄적용 -->
-    <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+    <style name="TextViewStyle">
         <item name="android:fontFamily">@font/nanum_gothic_coding</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
     <style name="ButtonStyle">
         <item name="android:stateListAnimator">@null</item>
         <item name="android:fontFamily">@font/nanum_gothic_coding</item>
         <item name="android:gravity">center</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
     <style name="EditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">

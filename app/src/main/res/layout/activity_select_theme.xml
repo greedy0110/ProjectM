@@ -61,7 +61,7 @@
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/dp"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />
@@ -75,7 +75,7 @@
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/db"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />
@@ -89,7 +89,7 @@
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/dgr"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />
@@ -103,7 +103,7 @@
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/dg"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />
@@ -126,7 +126,7 @@
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/ly"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />
@@ -140,7 +140,7 @@
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/lp"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />
@@ -154,7 +154,7 @@
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/lg"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />
@@ -168,7 +168,7 @@
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="@string/ls"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light" />

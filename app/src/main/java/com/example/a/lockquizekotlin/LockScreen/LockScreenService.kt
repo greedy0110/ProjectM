@@ -14,6 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.a.lockquizekotlin.DBContract.QuestionContract
@@ -27,6 +28,7 @@ import com.example.a.lockquizekotlin.Utils.ResourceUtils
 import kotlinx.android.synthetic.main.activity_question.*
 import kotlinx.android.synthetic.main.activity_select_theme.*
 import java.util.*
+import java.util.concurrent.locks.Lock
 
 // TODO  이 녀석이 오답노트 체크가능하도록 만들어야함
 class LockScreenService : Service() {
@@ -48,7 +50,9 @@ class LockScreenService : Service() {
 
     private var mQuestionTextView: TextView? = null
     private var mCategoryTextView: TextView? = null
-    private var mCountdownTextView: TextView? = null
+    private val mNumOfCountDot = 5
+    private var mNextCloseDot = 5
+    private var dotManager :LockDotManager? = null
 
 
     override fun onBind(intent: Intent): IBinder? {
@@ -75,8 +79,9 @@ class LockScreenService : Service() {
 
         mQuestionTextView = mView?.findViewById(R.id.qquestion_textview)
         mCategoryTextView = mView?.findViewById(R.id.qcategory_textview)
-        mCountdownTextView = mView?.findViewById(R.id.countdown_textview)
-
+        mView?.let {
+            dotManager = LockDotManager(it, mNumOfCountDot)
+        }
         val layout = mView?.findViewById(R.id.lock_screen_layout) as View
         LayoutUtils.setTheme(applicationContext, layout)
 
@@ -205,7 +210,8 @@ class LockScreenService : Service() {
             layout.setBackgroundResource(R.drawable.w_back)
             shakeQuestion()
             // 다른 버튼을 누를 수 없어야함, 강제 잠금 설정 시간 후 만큼 기다려야함
-            val countDownTerm = 1000L
+            val countDownTerm = (forceLockPeriod/mNumOfCountDot).toLong()
+            dotManager?.open()
             countdown(forceLockPeriod.toLong(), countDownTerm)
             AndroidComponentUtils.postDelayedLaunch({
                 LayoutUtils.setTheme(applicationContext, layout)
@@ -218,10 +224,11 @@ class LockScreenService : Service() {
 
     private fun countdown(time: Long, term: Long) {
         Log.d(TAG, "$time 밀리초 남음!")
+        // 하나의 dot 이 꺼짐
+        dotManager?.close()
         if (time - term < 0) {
-            mCountdownTextView?.text = ""
+            // 모든 dot 들이 꺼짐
         } else {
-            mCountdownTextView?.text = (time/1000).toString()
             AndroidComponentUtils.postDelayedLaunch({ countdown(time - term, term) }, term)
         }
     }
@@ -276,5 +283,32 @@ class LockScreenService : Service() {
         mCategoryTextView?.text = item.category
         mQuestionTextView?.text = item.question + " (${item.year})"
         answer = item.answer
+    }
+}
+
+class LockDotManager(val mView: View, val mNumOfCountDot: Int = 5) {
+    private var mNextCloseCount = mNumOfCountDot
+    private val mLockDotList = mutableListOf<View>()
+
+    init {
+        val theme = SettingsContract.getCurrentTheme(mView.context)
+        for (i in 1..mNumOfCountDot) {
+            val dot = mView.findViewWithTag<ImageView>("lock_dot$i")
+            dot.setBackgroundResource(ResourceUtils.findDrawableByName(mView.context,"${theme}_dot"))
+            mLockDotList.add(dot)
+        }
+    }
+
+    fun open() {
+        for (v in mLockDotList) {
+            v.visibility = View.VISIBLE
+        }
+        mNextCloseCount = mNumOfCountDot
+    }
+
+    fun close() {
+        if (mNextCloseCount-1 < 0) return
+        mLockDotList[mNextCloseCount-1].visibility = View.INVISIBLE
+        mNextCloseCount--
     }
 }

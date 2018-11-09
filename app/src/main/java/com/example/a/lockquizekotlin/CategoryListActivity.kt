@@ -6,6 +6,7 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -27,7 +28,8 @@ class CategoryListActivity : AppCompatActivity() {
         val categoryTable = readAllCategoryTable()
 
         // 각 카테고리 만큼 버튼을 제작하고 (버튼은 각자 자기 id 를 가지고 있어야 한다) (categoy_list에 추가해야 한다.)
-        for (entry in categoryTable) {
+        for (i in 0..categoryTable.size - 1) {
+            val entry = categoryTable[i]
             // 각 버튼은 오답노트용 / 그냥 문제 풀이용 이벤트로 갈림
             // 문제 activity에 자기 버튼 id와 문제 풀이용인지, 오답노트 용인지 체크 한 것을 보낸다.
             val button = Button(applicationContext)
@@ -37,13 +39,16 @@ class CategoryListActivity : AppCompatActivity() {
             button.background.alpha = 0
             if (Build.VERSION.SDK_INT >= 23)
                 button.setTextAppearance(R.style.ButtonStyle)
+            button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f) // 14dp 로 설정
             category_list.addView(button)
 
-            val factor = applicationContext.resources.displayMetrics.density
-            val border = ImageView(applicationContext)
-            border.setBackgroundColor(Color.GRAY)
-            border.layoutParams = LinearLayout.LayoutParams((100 * factor).toInt(), LinearLayout.LayoutParams.WRAP_CONTENT, 0.02f)
-            category_list.addView(border)
+            if (i != categoryTable.size - 1) { // 마지막 줄은 생성안함
+                val factor = applicationContext.resources.displayMetrics.density
+                val border = ImageView(applicationContext)
+                border.setBackgroundColor(Color.GRAY)
+                border.layoutParams = LinearLayout.LayoutParams((100 * factor).toInt(), LinearLayout.LayoutParams.WRAP_CONTENT, 0.02f)
+                category_list.addView(border)
+            }
 
             button.setOnClickListener {
                 if (isOx) { // 오답 노트용 QuestionActivity를 만들어야 한다.

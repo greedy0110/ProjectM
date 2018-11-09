@@ -25,14 +25,14 @@
     <ImageView
         android:id="@+id/qa_check_image"
         android:layout_width="wrap_content"
-        android:layout_height="215dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="188dp"
         android:layout_marginEnd="8dp"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/qa_qquestion_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/qa_qcategory_textview"
         app:srcCompat="@drawable/check" />
 
     <Button
@@ -83,30 +83,29 @@
         android:id="@+id/qa_qquestion_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="75dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="QUESTION"
         android:textAlignment="textStart"
         android:textColor="@android:color/background_light"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/qa_next_question_button"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/qa_qcategory_textview" />
+        app:layout_constraintStart_toEndOf="@+id/qa_prev_question_button"
+        app:layout_constraintTop_toTopOf="@+id/qa_prev_question_button" />
 
     <TextView
         android:id="@+id/qa_qcategory_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="200dp"
         android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
         android:text="CATEGORY"
         android:textColor="@android:color/background_light"
+        app:layout_constraintBottom_toTopOf="@+id/qa_qquestion_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/qa_no_button"
