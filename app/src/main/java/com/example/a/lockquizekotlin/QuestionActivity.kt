@@ -55,7 +55,7 @@ class QuestionActivity : AppCompatActivity() {
             else setQuestionUIByIndex(0)
         }
         else { // 오답 노트 용
-            selectedCategoryId = intent.extras.getInt("category_id") // 오답노트도 법 별로임!
+            selectedCategoryId = intent.extras.getInt("category_id") // 오답노트도 법 별로임! -1 일 때는 모든 오답노트를 가져올 거임
             questionList = getQuestionsByExistInIncorrectEntryTable(selectedCategoryId) // 오답노트 테이블에 있는 녀석만 가져옴
             Collections.shuffle(questionList)
             incorrectList = questionList.toMutableList()
@@ -261,17 +261,30 @@ class QuestionActivity : AppCompatActivity() {
     private fun getQuestionsByExistInIncorrectEntryTable(category_id: Int): MutableList<QuestionEntry> {
         val incorrects = IncorrectDB.readAll(applicationContext)
         val questions = QuestionDB.readAll(applicationContext)
-        val category_name =CategoryDB.readOne(applicationContext, category_id)?.category
-        if (category_name == null) return mutableListOf()
+        if (category_id != -1) {
+            val category_name = CategoryDB.readOne(applicationContext, category_id)?.category
+            if (category_name == null) return mutableListOf()
 
-        val result = mutableListOf<QuestionEntry>()
-        for (inc in incorrects) {
-            val q = questions.find {
-                (inc.question_id == it.id) && (it.category == category_name)
+            val result = mutableListOf<QuestionEntry>()
+            for (inc in incorrects) {
+                val q = questions.find {
+                    (inc.question_id == it.id) && (it.category == category_name)
+                }
+                if (q == null) continue
+                result.add(q)
             }
-            if (q == null) continue
-            result.add(q)
+            return result
         }
-        return result
+        else { // 모든 문제를 가져온다.
+            val result = mutableListOf<QuestionEntry>()
+            for (inc in incorrects) {
+                val q = questions.find {
+                    (inc.question_id == it.id)
+                }
+                if (q == null) continue
+                result.add(q)
+            }
+            return result
+        }
     }
 }
