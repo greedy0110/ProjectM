@@ -1,20 +1,10 @@
 package com.example.a.lockquizekotlin
 
-import android.app.Activity
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
-import com.example.a.lockquizekotlin.LockScreen.UnlockCaptureService
-import com.example.a.lockquizekotlin.Utils.LayoutUtils
-import com.example.a.lockquizekotlin.Utils.ResourceUtils
 import kotlinx.android.synthetic.main.activity_menu.*
 
-class MenuActivity : AppCompatActivity() {
+class MenuActivity : GreedyActivity() {
     val TAG = "MenuActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,16 +24,9 @@ class MenuActivity : AppCompatActivity() {
         }
 
         setting_button.setOnClickListener {
-            val setting = Intent(applicationContext, SettingActivitiy::class.java)
+            val setting = Intent(applicationContext, SettingActivity::class.java)
             startActivity(setting)
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        LayoutUtils.setTheme(applicationContext, activity_menu_layout)
-    }
-
-
 
 }

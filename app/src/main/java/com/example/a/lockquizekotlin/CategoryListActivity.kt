@@ -13,7 +13,7 @@ import com.example.a.lockquizekotlin.DBContract.CategoryDB
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import kotlinx.android.synthetic.main.activity_categorylist.*
 
-class CategoryListActivity : AppCompatActivity() {
+class CategoryListActivity : GreedyActivity() {
     private val TAG = "CategoryListActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,11 +73,6 @@ class CategoryListActivity : AppCompatActivity() {
         acl_end_button.setOnClickListener {
             LayoutUtils.goBack(this)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        LayoutUtils.setTheme(applicationContext, activity_categorylist_layout)
     }
 
     fun createListButton(): Button {

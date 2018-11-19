@@ -33,7 +33,7 @@ class LockScreenService : Service() {
     var mWindowManager: WindowManager? = null
     private var answer: String = ""
     // 문제 틀리고 해당 시간 아무것도 못하고 문제틀린것 확인가능 ㅎㅎ;
-    private var forceLockPeriod = SettingsContract.Schema.DEFAULT_SLIDE_FORCE_PERIOD
+    private var forceLockPeriod = 1000
 
     private var dx: Float = 0F
     private var dy: Float = 0F
@@ -278,7 +278,7 @@ class LockDotManager(val mView: View, val mNumOfCountDot: Int = 5) {
     private val mLockDotList = mutableListOf<View>()
 
     init {
-        val theme = SettingsContract.getCurrentTheme(mView.context)
+        val theme = SettingsPref.getTheme(mView.context)
         for (i in 1..mNumOfCountDot) {
             val dot = mView.findViewWithTag<ImageView>("lock_dot$i")
             dot.setBackgroundResource(ResourceUtils.findDrawableByName(mView.context,"${theme}_dot"))

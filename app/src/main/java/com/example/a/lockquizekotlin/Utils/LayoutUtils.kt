@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.DBContract.SettingsPref
 import com.example.a.lockquizekotlin.MenuActivity
 
 object LayoutUtils {
@@ -37,18 +39,21 @@ object LayoutUtils {
     }
 
     fun setTheme(context: Context, layout: View) {
-        val theme = SettingsContract.getCurrentTheme(context)
+        val settings = SettingsPref.getSettings(context)
 
-        layout.setBackgroundResource(ResourceUtils.findDrawableByName(context,"${theme}_back"))
+        layout.setBackgroundResource(ResourceUtils.findDrawableByName(context,"${settings.theme}_back"))
         val allTextViews = findTextViews(context, layout)
-        val textColor = if (theme[0] == 'd') Color.WHITE else Color.BLACK
+        val textColor = if (settings.theme[0] == 'd') Color.WHITE else Color.BLACK
+        Log.d("layoututil", settings.font)
+        val typeface = Typeface.createFromAsset(context.assets,"${settings.font}.ttf")
         for (tv in allTextViews) {
             tv.setTextColor(textColor)
+            tv.typeface = typeface
         }
     }
 
     fun setSlideButtonTheme(context: Context, slide: View, o: View, x: View) {
-        val theme = SettingsContract.getCurrentTheme(context)
+        val theme = SettingsPref.getTheme(context)
 
         slide.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_sbutton"))
         o.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_so"))
@@ -56,7 +61,7 @@ object LayoutUtils {
     }
 
     fun setSlideLeftRightTheme(context: Context, left:View, right: View) {
-        val theme = SettingsContract.getCurrentTheme(context)
+        val theme = SettingsPref.getTheme(context)
 
         left.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_left"))
         right.setBackgroundResource(ResourceUtils.findDrawableByName(context, "${theme}_right"))

@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/db_back"
-    android:id="@+id/activity_setting_layout"
-    tools:context=".SettingActivitiy">
+    android:id="@+id/SettingActivity_layout"
+    tools:context=".SettingActivity">
 
     <Button
         android:id="@+id/as_end_button"
@@ -67,15 +67,39 @@
             android:text="@string/skin_setting"
             android:textColor="@android:color/background_light" />
 
+        <ImageView
+            android:id="@+id/border5"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.0001"
+            app:srcCompat="@android:color/darker_gray" />
+
+
         <Button
-            android:id="@+id/other_setting_button"
+            android:id="@+id/font_setting_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/other"
-            android:textColor="@android:color/background_light"
-            android:visibility="gone" />
+            android:text="@string/font_setting"
+            android:textColor="@color/colorAccent" />
 
+        <ImageView
+            android:id="@+id/border6"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.0001"
+            app:srcCompat="@android:color/darker_gray" />
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/logout"
+            android:textColor="@android:color/background_light"
+            android:visibility="visible" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -8,19 +8,23 @@ import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import kotlinx.android.synthetic.main.activity_force_lock_setting.*
 import android.content.DialogInterface
 import android.util.Log
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.DBContract.SettingsPref
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 
 
-class ForceLockSettingActivity : AppCompatActivity() {
+class ForceLockSettingActivity : GreedyActivity() {
 
     val TAG = "ForceLockSetting"
     private val mForceLockList = arrayOf("1", "3", "5", "10")
-    private var mSlideForcePeriod = SettingsContract.Schema.DEFAULT_SLIDE_FORCE_PERIOD
+    private var mSlideForcePeriod = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_force_lock_setting)
+
+        val entry = SettingsPref.getSettings(applicationContext)
+        mSlideForcePeriod = entry.slideForcePeriod
+        updateUI()
 
         select_force_period_button.setOnClickListener {
             showSelectTimeDialog()
@@ -29,15 +33,6 @@ class ForceLockSettingActivity : AppCompatActivity() {
         afls_end_button.setOnClickListener {
             LayoutUtils.goBack(this)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        LayoutUtils.setTheme(applicationContext, activity_force_lock_setting_layout)
-
-        val entry = SettingsContract.getSettingsEntry(applicationContext)
-        mSlideForcePeriod = entry.slideForcePeriod
-        updateUI()
     }
 
     private fun showSelectTimeDialog() {
@@ -50,11 +45,11 @@ class ForceLockSettingActivity : AppCompatActivity() {
                 .setItems(mForceLockList, DialogInterface.OnClickListener {dialog, which ->
                     Log.d(TAG, "${mForceLockList[which]}, 선택됌")
                     val time = mForceLockList[which].toInt() * 1000
-                    val entry = SettingsContract.getSettingsEntry(applicationContext)
+                    val entry = SettingsPref.getSettings(applicationContext)
                     if (entry.slideForcePeriod == time) return@OnClickListener
                     entry.slideForcePeriod = time
                     mSlideForcePeriod = time
-                    SettingsContract.setSettingsEntry(applicationContext, entry)
+                    SettingsPref.setSettings(applicationContext, entry)
                     if (entry.slideOnOff == "o") {
                         AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
                     }

@@ -1,16 +1,15 @@
 package com.example.a.lockquizekotlin
 
-import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
+import com.example.a.lockquizekotlin.DBContract.SettingsPref
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import kotlinx.android.synthetic.main.activity_slide_on_off_setting.*
 
-class SlideOnOffSettingActivity : AppCompatActivity() {
+class SlideOnOffSettingActivity : GreedyActivity() {
 
     val TAG = "SlideOnOffSetting"
 
@@ -18,14 +17,14 @@ class SlideOnOffSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_slide_on_off_setting)
 
-        var entry = SettingsContract.getSettingsEntry(applicationContext)
+        var entry = SettingsPref.getSettings(applicationContext)
         updateUI(entry.slideOnOff == "o")
 
         slide_on_button.setOnClickListener {
             if (entry.slideOnOff == "o") return@setOnClickListener
             Log.d(TAG, "slide on button 클릭")
             entry.slideOnOff = "o"
-            SettingsContract.setSettingsEntry(applicationContext, entry)
+            SettingsPref.setSettings(applicationContext, entry)
             // 설정을 적용하려면 lock service 를 다시 켜줘야한다.
             AndroidComponentUtils.startUnlockCaptureServiceNoVersionCheck(applicationContext)
             updateUI(true)
@@ -35,7 +34,7 @@ class SlideOnOffSettingActivity : AppCompatActivity() {
             if (entry.slideOnOff == "x") return@setOnClickListener
             Log.d(TAG, "slide off button 클릭")
             entry.slideOnOff = "x"
-            SettingsContract.setSettingsEntry(applicationContext, entry)
+            SettingsPref.setSettings(applicationContext, entry)
             // 서비스를 끄자!
             AndroidComponentUtils.stopUnlockCaptureService(applicationContext)
             updateUI(false)
@@ -44,11 +43,6 @@ class SlideOnOffSettingActivity : AppCompatActivity() {
         asoos_end_button.setOnClickListener {
             LayoutUtils.goBack(this)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        LayoutUtils.setTheme(applicationContext, activity_slide_on_off_setting_layout)
     }
 
     private fun updateUI(on: Boolean){

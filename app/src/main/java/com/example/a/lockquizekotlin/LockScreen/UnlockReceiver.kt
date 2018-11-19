@@ -5,9 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
 import android.util.Log
-import com.example.a.lockquizekotlin.DBContract.SettingsContract
 import android.telephony.PhoneStateListener
-
+import com.example.a.lockquizekotlin.DBContract.SettingsPref
 
 
 class UnlockReceiver : BroadcastReceiver() {
@@ -37,7 +36,7 @@ class UnlockReceiver : BroadcastReceiver() {
                 // LockScreenService 를 시작해주어야 한다.
                 // 이미 LockScreenService 를 띄워줄 권한은 받은 상태여야 한다.
                 val intent = Intent(context, LockScreenService::class.java)
-                val setting = SettingsContract.getSettingsEntry(context)
+                val setting = SettingsPref.getSettings(context)
                 intent.putExtra("forceLockPeriod", setting.slideForcePeriod)
                 context.startService(intent)
             }

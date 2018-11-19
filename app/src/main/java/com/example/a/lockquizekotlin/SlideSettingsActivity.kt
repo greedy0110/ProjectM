@@ -7,7 +7,7 @@ import android.util.Log
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import kotlinx.android.synthetic.main.activity_slide_settings.*
 
-class SlideSettingsActivity : AppCompatActivity() {
+class SlideSettingsActivity : GreedyActivity() {
 
     val TAG = "SlideSettingsActivity"
 
@@ -30,10 +30,5 @@ class SlideSettingsActivity : AppCompatActivity() {
         ass_end_button.setOnClickListener {
             LayoutUtils.goBack(this)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        LayoutUtils.setTheme(applicationContext, activity_slide_settings_layout)
     }
 }

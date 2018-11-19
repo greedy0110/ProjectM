@@ -17,7 +17,7 @@ import com.example.a.lockquizekotlin.Utils.MathUtils
 import kotlinx.android.synthetic.main.activity_question.*
 import java.util.*
 
-class QuestionActivity : AppCompatActivity() {
+class QuestionActivity : GreedyActivity() {
     val TAG = "QuestionActivity"
     private var questionDbHelper: SQLiteOpenHelper? = null
     private var userDbHelper: SQLiteOpenHelper? = null
@@ -70,7 +70,6 @@ class QuestionActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        LayoutUtils.setTheme(applicationContext, activity_question_layout)
         LayoutUtils.setSlideButtonTheme(applicationContext, qa_drag_button_view, qa_yes_button, qa_no_button)
         LayoutUtils.setSlideLeftRightTheme(applicationContext, qa_prev_question_button, qa_next_question_button)
 
@@ -178,10 +177,10 @@ class QuestionActivity : AppCompatActivity() {
 
     private fun wrongAnswer() {
         Toast.makeText(applicationContext, "오답입니다.", Toast.LENGTH_SHORT).show()
-        activity_question_layout.setBackgroundResource(R.drawable.w_back)
+        QuestionActivity_layout.setBackgroundResource(R.drawable.w_back)
         shakeQuestion()
         AndroidComponentUtils.postDelayedLaunch({
-            LayoutUtils.setTheme(applicationContext, activity_question_layout)
+            LayoutUtils.setTheme(applicationContext, QuestionActivity_layout)
         }, 1000)
     }
 
