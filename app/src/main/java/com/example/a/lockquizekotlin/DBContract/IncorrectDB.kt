@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import android.util.Log
 import com.example.a.lockquizekotlin.Utils.DbUtils
 
 object IncorrectDB: IDB<IncorrectEntry> {
@@ -125,16 +126,14 @@ private object IncorrectSchema : BaseColumns {
     const val COLUMN_ID = "id"
     const val COLUMN_NAME_QUESTION_ID = "question_id"
 
-    const val SQL_CREATE_ENTRIES = "CREATE TABLE $TABLE_NAME (\n" +
-            "\t$COLUMN_ID\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-            "\t$COLUMN_NAME_QUESTION_ID\tINTEGER NOT NULL,\n" +
-            ");"
+    const val SQL_CREATE_ENTRIES = "CREATE TABLE $TABLE_NAME ( $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COLUMN_NAME_QUESTION_ID INTEGER )"
     const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS $TABLE_NAME"
 }
 
 private class IncorrectDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
         try {
+            Log.d("incorrect", "create")
             db?.execSQL(IncorrectSchema.SQL_CREATE_ENTRIES)
         }
         catch (e: Exception) {

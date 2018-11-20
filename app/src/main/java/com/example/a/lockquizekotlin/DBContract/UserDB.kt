@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import android.util.Log
 
 //- name
 //- user_id
@@ -137,6 +138,7 @@ private object UserSchema: BaseColumns {
 private class UserDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
         try {
+            Log.d("userdb", "craete")
             db?.execSQL(UserSchema.SQL_CREATE_ENTRIES)
         }
         catch (e: Exception) {
