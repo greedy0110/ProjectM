@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.example.a.lockquizekotlin.DBContract.CategoryDB
+import com.example.a.lockquizekotlin.R.id.acl_end_button
+import com.example.a.lockquizekotlin.R.id.category_list
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import kotlinx.android.synthetic.main.activity_categorylist.*
 

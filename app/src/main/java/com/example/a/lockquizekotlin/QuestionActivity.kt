@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.example.a.lockquizekotlin.DBContract.*
 import com.example.a.lockquizekotlin.R.id.*
+import com.example.a.lockquizekotlin.Repository.QuestionRepository
 import com.example.a.lockquizekotlin.Utils.AndroidComponentUtils
 import com.example.a.lockquizekotlin.Utils.LayoutUtils
 import com.example.a.lockquizekotlin.Utils.MathUtils
@@ -34,6 +35,7 @@ class QuestionActivity : GreedyActivity() {
     private var noButtonX: Float = 0F
     private var checkNear: Float = 150F
     private var moveableReach: Float = 0F
+    private val repository by lazy { QuestionRepository(applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +47,9 @@ class QuestionActivity : GreedyActivity() {
         justCategory = intent.extras.getBoolean("ox")
         if (justCategory) { // 카테고리에 해당하는 문제 나열 용
             selectedCategoryId = intent.extras.getInt("category_id")
-            questionList = getQuestionsByCategoryId(selectedCategoryId)
+            questionList = repository.getQuestionsByCategoryId(selectedCategoryId)
             Collections.shuffle(questionList)
-            incorrectList = getQuestionsByExistInIncorrectEntryTable(selectedCategoryId)
+            incorrectList = repository.getQuestionsByExistInIncorrectEntryTable(selectedCategoryId)
             if (questionList.isEmpty()) {
                 Toast.makeText(applicationContext, "지정된 카테고리에 문제가 없습니다.", Toast.LENGTH_SHORT).show()
                 finish()
@@ -56,7 +58,7 @@ class QuestionActivity : GreedyActivity() {
         }
         else { // 오답 노트 용
             selectedCategoryId = intent.extras.getInt("category_id") // 오답노트도 법 별로임! -1 일 때는 모든 오답노트를 가져올 거임
-            questionList = getQuestionsByExistInIncorrectEntryTable(selectedCategoryId) // 오답노트 테이블에 있는 녀석만 가져옴
+            questionList = repository.getQuestionsByExistInIncorrectEntryTable(selectedCategoryId) // 오답노트 테이블에 있는 녀석만 가져옴
             Collections.shuffle(questionList)
             incorrectList = questionList.toMutableList()
             if (questionList.isEmpty()) {
@@ -236,54 +238,5 @@ class QuestionActivity : GreedyActivity() {
 
         qa_qcategory_textview.startAnimation(shake)
         qa_qquestion_textview.startAnimation(shake)
-    }
-
-    // category_id에 해당하는 문제 목록을 반환하자
-    private fun getQuestionsByCategoryId(category_id: Int): List<QuestionEntry> {
-        val questions = QuestionDB.readAll(applicationContext)
-        val categoryName = CategoryDB.readOne(applicationContext, category_id)
-
-        if (categoryName != null) {
-            val result = mutableListOf<QuestionEntry>()
-            for (q in questions) {
-                if (q.category == categoryName.category) {
-                    result.add(q)
-                }
-            }
-            return result.toList()
-        }
-        else {
-            return listOf()
-        }
-    }
-
-    private fun getQuestionsByExistInIncorrectEntryTable(category_id: Int): MutableList<QuestionEntry> {
-        val incorrects = IncorrectDB.readAll(applicationContext)
-        val questions = QuestionDB.readAll(applicationContext)
-        if (category_id != -1) {
-            val category_name = CategoryDB.readOne(applicationContext, category_id)?.category
-            if (category_name == null) return mutableListOf()
-
-            val result = mutableListOf<QuestionEntry>()
-            for (inc in incorrects) {
-                val q = questions.find {
-                    (inc.question_id == it.id) && (it.category == category_name)
-                }
-                if (q == null) continue
-                result.add(q)
-            }
-            return result
-        }
-        else { // 모든 문제를 가져온다.
-            val result = mutableListOf<QuestionEntry>()
-            for (inc in incorrects) {
-                val q = questions.find {
-                    (inc.question_id == it.id)
-                }
-                if (q == null) continue
-                result.add(q)
-            }
-            return result
-        }
     }
 }
